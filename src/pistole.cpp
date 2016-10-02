@@ -43,6 +43,10 @@ void Pistole::init_box(ofVec2f center){
 
 void Pistole::update(){
     box->SetLinearVelocity(b2Vec2(speed_dir.x, speed_dir.y));
+    auto pos = box->GetPosition();
+    if(abs(pos.x) > 100 || abs(pos.y) > 100){
+        state = BulletState::NOT_EXIST;
+    }
 }
 
 

@@ -8,8 +8,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    world = std::make_shared<World>();
-    hud_screen = std::make_shared<HUDScreen>(*world);
+    world       = std::make_shared<World>();
+    hud_screen  = std::make_shared<HUDScreen>(*world);
+    hud_debug   = std::make_shared<HUDDebug>(*world);
 }
 
 //--------------------------------------------------------------
@@ -21,6 +22,7 @@ void ofApp::update(){
 void ofApp::draw(){
     world->display();
     hud_screen->display();
+    hud_debug->display();
 }
 
 //--------------------------------------------------------------

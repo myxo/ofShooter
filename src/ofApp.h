@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "world.h"
 #include "HUDScreen.h"
+#include "HUDDebug.h"
 
 #define N_KEY_PRESS 0x1
 #define S_KEY_PRESS 0x2
@@ -31,7 +32,8 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
-		std::shared_ptr<World> world;
-		std::shared_ptr<HUDScreen> hud_screen;
+		std::shared_ptr<World> 		world;
+		std::shared_ptr<HUDScreen> 	hud_screen;
+		std::shared_ptr<HUDDebug>	hud_debug;
 
 };
