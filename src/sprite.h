@@ -10,6 +10,7 @@ using namespace std;
 class Sprite{
 public:
     Sprite();
+    Sprite(int seed_);
     
     void display(b2Vec2 position, b2Vec2 heading, double scaleX = 1.0, double scaleY = 1.0);
     void display_still(b2Vec2 position, b2Vec2 heading, double scaleX = 1.0, double scaleY = 1.0);
@@ -19,9 +20,12 @@ public:
     void set_single_image_sprite(const char* filename);
 
     void set_frame_number(int n);
+
+    void change_seed();
+    void change_seed(int seed);
 private:
     vector<unique_ptr<ofImage>> frames;
-    int frame_total, frame_number;
+    int frame_total, frame_number, seed = 0;
     double animationSpeed; 
 
 };

@@ -19,5 +19,5 @@ public:
     ofVec2f get_center_screen() const;
 
 public:
-    b2Body  *box;
+    
 };

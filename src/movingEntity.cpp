@@ -10,6 +10,6 @@ ofVec2f movingEntity::get_center_box() const{
     return center;
 }
 ofVec2f movingEntity::get_center_screen() const{
-    ofVec2f center = World::box2of(World::transformeBoxToScreenCoorditane(box->GetPosition()));
+    ofVec2f center = World::box2of(world_ptr->transformeBoxToScreenCoorditane(box->GetPosition()));
     return center;
 }

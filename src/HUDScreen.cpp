@@ -7,6 +7,9 @@
 HUDScreen::HUDScreen(const World& world_) : world(world_) {}
 
 void HUDScreen::display(){
+    // ofPushMatrix();
+    // ofTranslate(world.window_start_x, world.window_start_y);
+
     display_life(world.player.get());
 
     for (auto mob : world.mob_array){
@@ -14,6 +17,8 @@ void HUDScreen::display(){
             display_life(mob.get());
         }
     }
+
+    // ofPopMatrix();
 }
 
 void HUDScreen::display_life(movingEntity *object){

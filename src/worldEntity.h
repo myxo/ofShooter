@@ -1,6 +1,11 @@
 #pragma once
 
+// #include "world.h"
+
 #include "ofMain.h"
+#include "Box2D/Box2D.h"
+
+class World;
 
 class worldEntity{
 public:
@@ -15,4 +20,8 @@ public:
 
 private:
     static size_t obj_count;
+    
+protected:
+    b2Body  *box;
+    World *world_ptr;
 };

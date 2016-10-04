@@ -33,7 +33,7 @@ public:
     void hud_display();
 
 private:
-    World *world_ptr;
+    // World *world_ptr;
 
     Sprite sprite;
     PlayerState state;

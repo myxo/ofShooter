@@ -56,7 +56,7 @@ void Player::display(){
     ofSetColor(0, 0, 255);
 
     b2Vec2 position = box->GetPosition();
-    b2Vec2 screen_coord = World::transformeBoxToScreenCoorditane(position);
+    b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position);
     // ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
     b2Vec2 heading(ofGetAppPtr()->mouseX - screen_coord.x, ofGetAppPtr()->mouseY - screen_coord.y);
 

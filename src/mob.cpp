@@ -21,6 +21,7 @@ Mob::Mob(ofVec2f center, double radius, int life, World *world_ptr){
     state = MobState::MAY_ATTACK;
 
     sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, "/home/myxo/ssyp/of/shooter/data/bloatedzombonewalking.png", 0.3);
+    sprite.change_seed();
     dead_sprite.set_single_image_sprite("/home/myxo/ssyp/of/shooter/data/mob_blood.png");
 
     box_init(center);
@@ -68,7 +69,7 @@ void Mob::update(){
 
 void Mob::display(){
     b2Vec2 position = box->GetPosition();
-    b2Vec2 screen_coord = World::transformeBoxToScreenCoorditane(position);
+    b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position);
 
     if (state == MobState::DEAD){
         dead_sprite.display(screen_coord,b2Vec2(0,1));

@@ -27,7 +27,7 @@ public:
     int     damage = 5;
     float   speed_max = 1;
     int     attack_time_start, rest_time_start;
-    World   *world_ptr;
+    // World   *world_ptr;
     
 
     MobState state;

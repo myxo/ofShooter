@@ -5,6 +5,7 @@
 #include "HUDScreen.h"
 
 #include <stdio.h>
+#include <iostream>
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -76,15 +77,12 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    ofVec2f mouse_box_coord = World::box2of(World::transformeScreenToBoxCoorditane(b2Vec2(x, y)));
-    ofVec2f player_center = world->player->get_center();
-    ofVec2f speed_dir(mouse_box_coord.x - player_center.x, mouse_box_coord.y - player_center.y);
+    // ofVec2f mouse_box_coord = World::box2of(world->transformeScreenToBoxCoorditane(b2Vec2(x, y)));
+    ofVec2f mouse(x, y);
+    // ofVec2f player_center = world->player->get_center_screen();
+    // ofVec2f speed_dir(mouse.x - player_center.x, mouse.y - player_center.y);
     //ofVec2f speed_dir =  World::box2of(World::transformeScreenToBoxCoorditane(screen_speed_dir));
-    speed_dir.normalize();
-    player_center += (speed_dir * 0.5);
-    speed_dir *= 35.0;
-
-    world->bullet_array.push_back(std::make_shared<Pistole>(player_center, speed_dir, world.get()));
+    world->gun_fire(mouse);
 }
 
 //--------------------------------------------------------------
