@@ -20,6 +20,7 @@ public:
     void set_single_image_sprite(const char* filename);
 
     void set_frame_number(int n);
+    void set_frame_number_random();
 
     void change_seed();
     void change_seed(int seed);

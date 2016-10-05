@@ -1,13 +1,15 @@
 #include "pistole.h"
 #include "world.h"
 
+#include "ofMain.h"
+
 
 Pistole::Pistole(ofVec2f center, ofVec2f speed_dir, World *world_ptr) : movingEntity(){
     this->world_ptr = world_ptr;
     this->speed_dir = speed_dir;
     state = BulletState::EXIST;
 
-    damage = 50;
+    damage = 10;
 
     init_box(center);
 
@@ -43,8 +45,10 @@ void Pistole::init_box(ofVec2f center){
 
 void Pistole::update(){
     box->SetLinearVelocity(b2Vec2(speed_dir.x, speed_dir.y));
-    auto pos = box->GetPosition();
-    if(abs(pos.x) > 100 || abs(pos.y) > 100){
+    // auto pos = box->GetPosition();
+    auto pos = get_center_screen();
+    if(pos.x > 2 * ofGetWidth() || pos.y > 2 * ofGetHeight()     // TODO this is just some euristic 
+        || pos.x < -ofGetWidth() || pos.y < -ofGetHeight()){     // think how it would be better 
         state = BulletState::NOT_EXIST;
     }
 }

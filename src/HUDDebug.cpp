@@ -7,10 +7,18 @@ HUDDebug::HUDDebug(const World& world_) : world(world_){}
 
 void HUDDebug::display(){
     // left corner
+    ofSetColor(255, 255, 255);
+    ofDrawRectangle(25, 25, 100, 100);
+    ofSetColor(255, 0, 0);
     ofDrawBitmapString(ofToString(ofGetFrameRate(), 1), 50, 50); // TODO load font and change size
 
     // right corner
     int text_offset = ofGetWidth() - 150;
+    
+    ofSetColor(255, 255, 255);
+    ofDrawRectangle(text_offset - 10, 25, text_offset + 100, 100);
+    ofSetColor(255, 0, 0);
+
     ofVec2f player_center_box = world.player->get_center_box();
     ofVec2f player_center_screen = world.player->get_center_screen();
     auto player_position = "(" + ofToString(player_center_box.x,1) + " ," + ofToString(player_center_box.y,1) + ")";

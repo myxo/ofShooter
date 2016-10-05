@@ -77,12 +77,7 @@ void ofApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    // ofVec2f mouse_box_coord = World::box2of(world->transformeScreenToBoxCoorditane(b2Vec2(x, y)));
-    ofVec2f mouse(x, y);
-    // ofVec2f player_center = world->player->get_center_screen();
-    // ofVec2f speed_dir(mouse.x - player_center.x, mouse.y - player_center.y);
-    //ofVec2f speed_dir =  World::box2of(World::transformeScreenToBoxCoorditane(screen_speed_dir));
-    world->gun_fire(mouse);
+    world->gun_fire(ofVec2f(x, y));
 }
 
 //--------------------------------------------------------------

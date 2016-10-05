@@ -13,15 +13,14 @@ Mob::Mob(ofVec2f center, double radius, int life, World *world_ptr){
     this->center    = center;
     this->radius    = radius;
     this->life      = life;
-    // this->obj_id    = obj_id;
 
     this->world_ptr = world_ptr;
 
     speed = 5;
     state = MobState::MAY_ATTACK;
 
-    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, "/home/myxo/ssyp/of/shooter/data/bloatedzombonewalking.png", 0.3);
-    sprite.change_seed();
+    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, "/home/myxo/ssyp/of/shooter/data/bloatedzombonewalking.png", 0.2);
+    sprite.set_frame_number_random();
     dead_sprite.set_single_image_sprite("/home/myxo/ssyp/of/shooter/data/mob_blood.png");
 
     box_init(center);
@@ -41,8 +40,8 @@ void Mob::box_init(ofVec2f center){
     dynamicBox.m_radius = radius;
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 15.0f;
-    fixtureDef.friction = 0.3f;
+    // fixtureDef.density = 15.0f;
+    // fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = EntityCategory::MOB;
     // collide enttities
     fixtureDef.filter.maskBits = BUILDINGS | MOB | BULLET | PLAYER ;
@@ -81,7 +80,7 @@ void Mob::display(){
     else if (state == MobState::ATTACKING)
         ofSetColor(255, 255, 0);
 
-    // ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
+    ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
     sprite.display(screen_coord, World::of2box(speed_dir));
 }
 
@@ -90,7 +89,7 @@ void Mob::take_damage(int damage){
         return;
 
     life -= damage;
-    if (life < 0){
+    if (life <= 0){
         become_dead();
         life = 0;
     }

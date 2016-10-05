@@ -4,12 +4,12 @@ using namespace std;
 
 Sprite::Sprite(){}
 
-// Warning. If call this method second time it may be mess. think what should I do in this case. 
+// Warning. TODO. If call this method second time it may be mess. think what should I do in this case. 
 void Sprite::parse_sprite_file(int col, int row, int sizeX, int sizeY, int offset, int separation,
                 const char* filename, double animationSpeed){
     this->animationSpeed = animationSpeed;
-    this->frame_total = col * row; // TODO what if it not fill to the rect?
-    this->frame_number = 0; // TODO make random (c++ 11 way)
+    this->frame_total = col * row; // TODO what if it not fill the rect?
+    this->frame_number = 0;
 
     ofImage source;
     source.load(filename);
@@ -54,7 +54,8 @@ void Sprite::display_still(b2Vec2 position, b2Vec2 heading, double scaleX, doubl
 
     int index = (int) (frame_number * animationSpeed + seed) % frame_total;
     int sizeX = frames[index]->getWidth(), sizeY = frames[index]->getHeight();
-    frames[index]->draw(-sizeX/2, -sizeY/2, sizeX*scaleX, sizeY*scaleY); // TODO think how scale better be used
+    ofSetColor(255, 255, 255);
+    frames[index]->draw(-sizeX/2, -sizeY/2, sizeX*scaleX, sizeY*scaleY);
 
     ofPopMatrix();
 }
@@ -63,9 +64,14 @@ void Sprite::set_frame_number(int n){
     frame_number = n;
 }
 
-void Sprite::change_seed(){
-    seed = std::rand() % frame_total;
+void Sprite::set_frame_number_random(){
+    frame_number = std::rand() % frame_total;
 }
-void Sprite::change_seed(int seed_){
-    seed = seed_;
-}
+
+
+// void Sprite::change_seed(){
+//     seed = std::rand() % frame_total;
+// }
+// void Sprite::change_seed(int seed_){
+//     seed = seed_;
+// }

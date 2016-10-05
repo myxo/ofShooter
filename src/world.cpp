@@ -17,12 +17,13 @@ World::World(){
     CL = new ContactListener();
     box2d_world->SetContactListener(CL);
 
-    player = std::make_shared<Player>(ofVec2f(0, 0), 0.7, 30, this);
+    player = std::make_shared<Player>(ofVec2f(0, 0), 0.8, 30, this);
 
     for (int i = 0; i < MOB_MAX; i++){
-        mob_array.push_back(std::make_shared<Mob>(ofVec2f(5, i*5 + 10), 0.5, 10, this));
+        mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%20-10, std::rand()%20-10), 0.7, 20, this));
     }
 
+    tile.load("/home/myxo/ssyp/of/shooter/data/bg.png");
 
     // w = new Wall(ofVec2f(-10, 0), ofVec2f(10, 0), this);
 }
@@ -62,11 +63,7 @@ void World::gun_fire(ofVec2f mouse_screen){
     ofVec2f speed_dir(mouse_box.x - player_center.x, mouse_box.y - player_center.y);
     speed_dir.normalize();
     player_center += (speed_dir * 0.5);
-    speed_dir *= 35.0; // todo wtf?
-    
-    // ofVec2f player_center = world->player->get_center_box();
-
-    // cout << speed_dir << "\n";
+    speed_dir *= 35.0; // TODO remove magic numbers
 
     bullet_array.push_back(std::make_shared<Pistole>(player_center, speed_dir, this));
 }
@@ -83,6 +80,7 @@ void World::bullet_cleanup(){
 
 void World::display(){
     update_window_boundary();
+    display_tile_background(tile);
 
     // ofPushMatrix();
     // ofTranslate(window_start_x, window_start_y);
@@ -129,7 +127,7 @@ b2Vec2 World::of2box(ofVec2f a){
     return b2Vec2(a.x, a.y);
 }
 
-// Change window_start if player go to corner of window
+// Change window_start if player go to corner of the window
 void World::update_window_boundary(){
     auto p_center = player->get_center_screen();
     // int pixel_offset = player->speed;// * WORLD_RESOLUTION;
@@ -146,3 +144,26 @@ void World::update_window_boundary(){
         window_start_y += p_center.y - (ofGetHeight() - WINDOW_BOUND_TO_EXTEND_Y);
     }
 }
+
+void World::display_tile_background(ofImage tile){
+    int h = tile.getHeight(), w = tile.getWidth();
+    ofSetColor(255,255,255);
+    for (int i = -1; i < ofGetWidth() / w + 2; i++){
+        for (int j = -1; j < ofGetHeight() / h + 2; j++){
+            tile.draw(i*w - (window_start_x % w), j*h - (window_start_y % h));
+        }
+    }
+}
+
+// void World::generate_tile_background(const char* filename){
+//     ofImage tile;
+//     tile.load(filename);
+//     int h = tile.GetHeight(), w = tile.GetWidth();
+//     background_image.allocate(ofGetWidth() + w, ofGetHeight() + h, OF_IMAGE_COLOR); // TODO. make accurate allocation
+
+//     for (int i = 0; i < background_image.getPixels().size(); i++){
+//         background_image.getPixels()[i] = 
+//     }
+
+//     img.getTextureReference().setTextureWrap(GL_REPEAT, GL_REPEAT); img.width = 320;
+// }

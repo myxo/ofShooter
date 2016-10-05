@@ -43,12 +43,16 @@ public:
     // Wall *w;
 
     void update_window_boundary();
+    void display_tile_background(ofImage tile);
+    // void generate_tile_background(const char* filename);
 // private:
     std::shared_ptr<Player>                 player;
     std::vector<std::shared_ptr<Mob> >      mob_array;
     std::vector<std::shared_ptr<Bullet> >   bullet_array;
 
     std::shared_ptr<b2World>                box2d_world;
+    ofImage                                 background_image;
+    ofImage                                 tile;
 
     ContactListener* CL;
     float32 prev_frame_time;

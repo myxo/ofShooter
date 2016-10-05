@@ -17,7 +17,7 @@ public:
 
 public:
     // World *world_ptr;
-    b2Body *box;
+    // b2Body *box;
 
     ofVec2f speed_dir;
     int damage;

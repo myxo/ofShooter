@@ -5,7 +5,7 @@
 
 class Mob;
 
-enum BulletState{
+enum class BulletState{
     EXIST,
     NOT_EXIST
 };
