@@ -80,7 +80,7 @@ void Mob::display(){
     else if (state == MobState::ATTACKING)
         ofSetColor(255, 255, 0);
 
-    ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
+    // ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
     sprite.display(screen_coord, World::of2box(speed_dir));
 }
 

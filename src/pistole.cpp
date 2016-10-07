@@ -58,7 +58,7 @@ void Pistole::display(){
     if (state == BulletState::EXIST){
         ofSetColor(50, 50, 200);
         b2Vec2 position = box->GetPosition();
-        b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position); // TODO make this transition in sprite class???
+        b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position); // TODO add sprite???
         ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
     }
 }
