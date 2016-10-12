@@ -19,7 +19,7 @@ Player::Player(ofVec2f center, double radius, int life, World *world_ptr){
     speed_dir.set(0, 0);
     speed = 10;
 
-    sprite.parse_sprite_file(8, 1, 32, 54, 1, 1, "/home/myxo/ssyp/of/shooter/data/shooterofzombones.png", 0.4);
+    sprite.parse_sprite_file(8, 1, 32, 54, 1, 1, "../../data/shooterofzombones.png", 0.4);
 
     box_init();
 }

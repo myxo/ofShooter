@@ -19,9 +19,9 @@ Mob::Mob(ofVec2f center, double radius, int life, World *world_ptr){
     speed = 5;
     state = MobState::MAY_ATTACK;
 
-    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, "/home/myxo/ssyp/of/shooter/data/bloatedzombonewalking.png", 0.2);
+    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, "../../data/bloatedzombonewalking.png", 0.2);
+    dead_sprite.set_single_image_sprite("../../data/mob_blood.png");
     sprite.set_frame_number_random();
-    dead_sprite.set_single_image_sprite("/home/myxo/ssyp/of/shooter/data/mob_blood.png");
 
     box_init(center);
 }

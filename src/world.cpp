@@ -23,7 +23,7 @@ World::World(){
         mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%20-10, std::rand()%20-10), 0.7, 20, this));
     }
 
-    tile.load("/home/myxo/ssyp/of/shooter/data/bg.png");
+    tile.load("../../data/bg.png");
 
     // w = new Wall(ofVec2f(-10, 0), ofVec2f(10, 0), this);
 }
