@@ -37,7 +37,7 @@ void Pistole::init_box(ofVec2f center){
     fixtureDef.friction = 0.1f;
 
     fixtureDef.filter.categoryBits = EntityCategory::BULLET;
-    fixtureDef.filter.maskBits = BUILDINGS | MOB;
+    fixtureDef.filter.maskBits = EntityCategory::BUILDINGS | EntityCategory::MOB;
     box->CreateFixture(&fixtureDef);
 
     box->SetUserData(this);
@@ -59,7 +59,7 @@ void Pistole::display(){
         ofSetColor(50, 50, 200);
         b2Vec2 position = box->GetPosition();
         b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position); // TODO add sprite???
-        // draw in double size (or its hard to see them)
+        // draw in double size (overwise its hard to see them)
         ofDrawCircle(screen_coord.x, screen_coord.y, 2*radius * World::WORLD_RESOLUTION); 
     }
 }
@@ -75,5 +75,11 @@ void Pistole::collision_event(worldEntity *collision_entity){
 
     if (mob != 0){
         make_damage(mob);
+        return;
+    }
+
+    Building *building = dynamic_cast<Building*>(collision_entity);
+    if (building != 0){
+        state = BulletState::NOT_EXIST;
     }
 }

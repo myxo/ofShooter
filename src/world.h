@@ -5,12 +5,13 @@
 #include "bullet.h"
 #include "boxContactListener.h"
 #include "bulletFactory.h"
+#include "building.h"
 
 #include "wall.h"
 
 #include "Box2D/Box2D.h"
 
-#define MOB_MAX 10
+#define MOB_MAX 1
 
 class Mob;
 class Player;
@@ -26,6 +27,7 @@ enum EntityCategory{
 
 class Wall;
 class BulletFactory;
+class Building;
 
 class World{
 public:
@@ -38,7 +40,9 @@ public:
     void bullet_cleanup();
 
     b2Vec2 transformeBoxToScreenCoorditane(b2Vec2 coord);
+    ofVec2f transformeBoxToScreenCoorditane(ofVec2f coord);
     b2Vec2 transformeScreenToBoxCoorditane(b2Vec2 coord);
+    ofVec2f transformeScreenToBoxCoorditane(ofVec2f coord);
     static ofVec2f box2of(b2Vec2 a);
     static b2Vec2 of2box(ofVec2f a);
 
@@ -52,8 +56,9 @@ public:
 // private:
     std::shared_ptr<Player>                 player;
     std::shared_ptr<BulletFactory>          bullet_factory;
-    std::vector<std::shared_ptr<Mob> >      mob_array;
-    std::vector<std::shared_ptr<Bullet> >   bullet_array;
+    std::vector<std::shared_ptr<Mob>>       mob_array;
+    std::vector<std::shared_ptr<Bullet>>    bullet_array;
+    std::vector<std::shared_ptr<Building>>  building_array;
     std::unordered_map<string, string>      game_parametrs;
 
     std::shared_ptr<b2World>                box2d_world;

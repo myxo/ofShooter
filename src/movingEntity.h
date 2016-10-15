@@ -15,9 +15,6 @@ public:
     virtual void update(){}
     virtual void display(){}
 
-    ofVec2f get_center_box() const;
-    ofVec2f get_center_screen() const;
-
 public:
     
 };

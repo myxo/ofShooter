@@ -6,4 +6,8 @@ This is a simple top-down shooter game made with [openFrameworks (0.9.3)](http:/
 
  For some reasone openFrameworks makefiles doesn't set c++14 standard if gcc<=4.8, so check your gcc version (or edit OF linux Makefile).
 
- 
+ TODO:
+ * propper building
+ * data resource handling
+ * main menu, pause, etc.
+ * shadows

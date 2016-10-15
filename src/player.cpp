@@ -28,7 +28,7 @@ Player::Player(ofVec2f center, World *world_ptr){
 
 void Player::box_init(){
     b2BodyDef bodyDef;
-    bodyDef.type = b2_kinematicBody;
+    bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(center.x, center.y);
     box = world_ptr->box2d_world->CreateBody(&bodyDef);
 
@@ -41,7 +41,7 @@ void Player::box_init(){
     fixtureDef.density = 15.0f;
     fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = EntityCategory::PLAYER;
-    fixtureDef.filter.maskBits = BUILDINGS | MOB;
+    fixtureDef.filter.maskBits = EntityCategory::BUILDINGS | EntityCategory::MOB;
 
     box->CreateFixture(&fixtureDef);
 
@@ -97,7 +97,7 @@ void Player::take_damage(int damage){
 }
 
 void Player::collision_event(worldEntity *collision_entity){
-
+    cout << "OOOOWOOOH\n";
     // Mob *m = dynamic_cast<Mob*>(collision_entity)
     // if (m != 0){
 

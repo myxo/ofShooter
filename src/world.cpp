@@ -4,6 +4,7 @@
 #include "boxContactListener.h"
 #include "bulletFactory.h"
 #include "utils.h"
+#include "building.h"
 
 #include "ofMain.h"
 #include "Box2D/Box2D.h"
@@ -22,6 +23,10 @@ World::World(){
 
     player          = std::make_shared<Player>(ofVec2f(0, 0), this);
     bullet_factory  = std::make_shared<BulletFactory>(this);
+    
+    building_array.push_back(std::make_shared<Building>(this));
+    building_array[0]->building_from_file("../data/building");
+    cout << building_array[0]->vertex[0] << endl;
 
     for (int i = 0; i < MOB_MAX; i++){
         mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%30-15, std::rand()%30-15), this));
@@ -90,6 +95,10 @@ void World::display(){
         bullet->display();
     }
 
+    for (auto building: building_array){
+        building->display();
+    }
+
     player->display();
 
     // ofPopMatrix();
@@ -108,6 +117,26 @@ b2Vec2 World::transformeBoxToScreenCoorditane(b2Vec2 coord){
 
 
 b2Vec2 World::transformeScreenToBoxCoorditane(b2Vec2 coord){
+    int h = ofGetWindowHeight();
+    int w = ofGetWindowWidth();
+
+    coord.x = (coord.x - w/2 + window_start_x) / WORLD_RESOLUTION;
+    coord.y = (coord.y - h/2 + window_start_y) / WORLD_RESOLUTION;
+    return coord;
+}
+
+
+ofVec2f World::transformeBoxToScreenCoorditane(ofVec2f coord){
+    int h = ofGetWindowHeight();
+    int w = ofGetWindowWidth();
+
+    coord.x = coord.x * WORLD_RESOLUTION + w/2 - window_start_x;
+    coord.y = coord.y * WORLD_RESOLUTION + h/2 - window_start_y;
+    return coord;
+}
+
+
+ofVec2f World::transformeScreenToBoxCoorditane(ofVec2f coord){
     int h = ofGetWindowHeight();
     int w = ofGetWindowWidth();
 
