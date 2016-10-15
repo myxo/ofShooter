@@ -1,0 +1,17 @@
+game_name    ofShooter
+sprite_root_folder ../../data/
+player_speed    10
+player_radius   0.8
+player_life 30
+player_max_life 30
+player_sprite_filename  shooterofzombones.png
+mob_speed    5
+mob_radius   0.7
+mob_life 20
+mob_max_life 20
+mob_sprite_filename  bloatedzombonewalking.png
+mob_dead_sprite_filename    mob_blood.png
+pistole_bullet_speed    45
+pistole_bullet_damage   10
+pistole_bullet_radius   0.1
+//pistole_bullet_damage   10

@@ -6,6 +6,7 @@
 #include "sprite.h"
 
 #include "Box2D/Box2D.h"
+#include <chrono>
 
 class World;
 
@@ -17,7 +18,7 @@ enum class PlayerState{
 
 class Player : public movingEntity{
 public:
-    Player(ofVec2f center, double radius, int life, World *world_ptr);
+    Player(ofVec2f center, World *world_ptr);
     void box_init();
 
     void update();
@@ -37,4 +38,6 @@ private:
 
     Sprite sprite;
     PlayerState state;
+
+    // std::chrono::time_point gun_time_stamp; 
 };

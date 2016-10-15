@@ -41,6 +41,8 @@ void ofApp::keyPressed(int key){
 
     world->player->change_speed_dir(key_pressed);
 
+    if (key == '1')     world->bullet_factory->change_gun(1);
+    if (key == '2')     world->bullet_factory->change_gun(2);
 
 }
 

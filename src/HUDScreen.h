@@ -12,4 +12,6 @@ public:
 private:
     const World& world;
     void display_life(movingEntity* object);
+
+    ofTrueTypeFont  gun_message_font;
 };

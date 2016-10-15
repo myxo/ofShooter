@@ -9,18 +9,22 @@
 #include <iostream>
 
 
-Mob::Mob(ofVec2f center, double radius, int life, World *world_ptr){
+Mob::Mob(ofVec2f center, World *world_ptr){
     this->center    = center;
-    this->radius    = radius;
-    this->life      = life;
+    this->radius    = world_ptr->get_param_double("mob_radius");
+    this->life      = world_ptr->get_param_double("mob_life");
 
     this->world_ptr = world_ptr;
 
-    speed = 5;
+    speed = world_ptr->get_param_double("mob_speed");
     state = MobState::MAY_ATTACK;
 
-    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, "../../data/bloatedzombonewalking.png", 0.2);
-    dead_sprite.set_single_image_sprite("../../data/mob_blood.png");
+    string sprite_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
+        string(world_ptr->game_parametrs["mob_sprite_filename"]);
+    string sprite_dead_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
+        string(world_ptr->game_parametrs["mob_dead_sprite_filename"]);
+    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, sprite_path.c_str(), 0.2);
+    dead_sprite.set_single_image_sprite(sprite_dead_path.c_str());
     sprite.set_frame_number_random();
 
     box_init(center);

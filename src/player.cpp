@@ -10,16 +10,18 @@
 #include <stdio.h>
 #include "Box2D/Box2D.h"
 
-Player::Player(ofVec2f center, double radius, int life, World *world_ptr){
+Player::Player(ofVec2f center, World *world_ptr){
     this->center    = center;
-    this->radius    = radius;
-    this->life      = life;
+    this->radius    = world_ptr->get_param_double("player_radius");
+    this->life      = world_ptr->get_param_double("player_life");
     this->world_ptr = world_ptr;
 
     speed_dir.set(0, 0);
     speed = 10;
 
-    sprite.parse_sprite_file(8, 1, 32, 54, 1, 1, "../../data/shooterofzombones.png", 0.4);
+    string sprite_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
+        string(world_ptr->game_parametrs["player_sprite_filename"]);
+    sprite.parse_sprite_file(8, 1, 32, 54, 1, 1, sprite_path.c_str(), 0.4);
 
     box_init();
 }

@@ -10,7 +10,7 @@ public:
     ofVec2f speed_dir;
     double speed, radius;
     int life;
-    const int MAX_LIFE = 30;
+    int MAX_LIFE = 30;
 
     virtual void update(){}
     virtual void display(){}

@@ -8,8 +8,8 @@ Pistole::Pistole(ofVec2f center, ofVec2f speed_dir, World *world_ptr) : movingEn
     this->world_ptr = world_ptr;
     this->speed_dir = speed_dir;
     state = BulletState::EXIST;
-
-    damage = 10;
+    radius = world_ptr->get_param_double("pistole_bullet_radius");
+    damage = world_ptr->get_param_double("pistole_bullet_damage");
 
     init_box(center);
 
@@ -59,7 +59,8 @@ void Pistole::display(){
         ofSetColor(50, 50, 200);
         b2Vec2 position = box->GetPosition();
         b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position); // TODO add sprite???
-        ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
+        // draw in double size (or its hard to see them)
+        ofDrawCircle(screen_coord.x, screen_coord.y, 2*radius * World::WORLD_RESOLUTION); 
     }
 }
 

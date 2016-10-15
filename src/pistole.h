@@ -21,5 +21,4 @@ public:
 
     ofVec2f speed_dir;
     int damage;
-    float radius = 0.2;
 };

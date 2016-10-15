@@ -1,10 +1,16 @@
 #include "HUDScreen.h"
 #include "world.h"
 #include "ofMain.h"
+#include "bulletFactory.h"
 
 #include "stdio.h"
 
-HUDScreen::HUDScreen(const World& world_) : world(world_) {}
+HUDScreen::HUDScreen(const World& world_) : world(world_) {
+    gun_message_font.load("verdana.ttf", 25, true, true);
+    gun_message_font.setLineHeight(34.0f);
+    gun_message_font.setLetterSpacing(1.035);
+
+}
 
 void HUDScreen::display(){
     // ofPushMatrix();
@@ -17,6 +23,13 @@ void HUDScreen::display(){
             display_life(mob.get());
         }
     }
+
+    ofSetColor(0,0,0);
+    if (world.bullet_factory->active_gun == GunState::PISTOLE){
+        gun_message_font.drawString("PISTOLE", 200, 50);
+    } else if (world.bullet_factory->active_gun == GunState::SHOTGUN){
+        gun_message_font.drawString("SHOTGUN", 200, 50);
+    } 
 
     // ofPopMatrix();
 }

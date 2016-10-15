@@ -4,6 +4,7 @@
 #include "mob.h"
 #include "bullet.h"
 #include "boxContactListener.h"
+#include "bulletFactory.h"
 
 #include "wall.h"
 
@@ -24,6 +25,7 @@ enum EntityCategory{
 };
 
 class Wall;
+class BulletFactory;
 
 class World{
 public:
@@ -40,6 +42,8 @@ public:
     static ofVec2f box2of(b2Vec2 a);
     static b2Vec2 of2box(ofVec2f a);
 
+    double get_param_double(string param_key);
+
     // Wall *w;
 
     void update_window_boundary();
@@ -47,8 +51,10 @@ public:
     // void generate_tile_background(const char* filename);
 // private:
     std::shared_ptr<Player>                 player;
+    std::shared_ptr<BulletFactory>          bullet_factory;
     std::vector<std::shared_ptr<Mob> >      mob_array;
     std::vector<std::shared_ptr<Bullet> >   bullet_array;
+    std::unordered_map<string, string>      game_parametrs;
 
     std::shared_ptr<b2World>                box2d_world;
     ofImage                                 background_image;

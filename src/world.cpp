@@ -2,28 +2,33 @@
 #include "player.h"
 #include "pistole.h"
 #include "boxContactListener.h"
+#include "bulletFactory.h"
+#include "utils.h"
 
 #include "ofMain.h"
 #include "Box2D/Box2D.h"
 
-#include "iostream"
+#include <iostream>
+#include <string>
 
 
 World::World(){
     b2Vec2 gravity(0.0f, 0.0f);
-    // bool doSleep = true;
     box2d_world = std::make_shared<b2World>(gravity);
-    // box2d_world.setGravity(0,0);
     CL = new ContactListener();
     box2d_world->SetContactListener(CL);
+    
+    game_parametrs = parse_config_file("../data/game_parametrs");
 
-    player = std::make_shared<Player>(ofVec2f(0, 0), 0.8, 30, this);
+    player          = std::make_shared<Player>(ofVec2f(0, 0), this);
+    bullet_factory  = std::make_shared<BulletFactory>(this);
 
     for (int i = 0; i < MOB_MAX; i++){
-        mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%20-10, std::rand()%20-10), 0.7, 20, this));
+        mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%30-15, std::rand()%30-15), this));
     }
 
     tile.load("../../data/bg.png");
+
 
     // w = new Wall(ofVec2f(-10, 0), ofVec2f(10, 0), this);
 }
@@ -56,16 +61,8 @@ void World::update(){
     bullet_cleanup();
 }
 
-// TODO make proper bullet factory
 void World::gun_fire(ofVec2f mouse_screen){
-    ofVec2f mouse_box = box2of(transformeScreenToBoxCoorditane(b2Vec2(mouse_screen.x, mouse_screen.y)));
-    ofVec2f player_center = player->get_center_box();
-    ofVec2f speed_dir(mouse_box.x - player_center.x, mouse_box.y - player_center.y);
-    speed_dir.normalize();
-    player_center += (speed_dir * 0.5);
-    speed_dir *= 35.0; // TODO remove magic numbers
-
-    bullet_array.push_back(std::make_shared<Pistole>(player_center, speed_dir, this));
+    bullet_factory->create_bullets(mouse_screen);
 }
 
 void World::bullet_cleanup(){
@@ -167,3 +164,7 @@ void World::display_tile_background(ofImage tile){
 
 //     img.getTextureReference().setTextureWrap(GL_REPEAT, GL_REPEAT); img.width = 320;
 // }
+
+double World::get_param_double(string key){
+    return stod(game_parametrs[key]);
+}

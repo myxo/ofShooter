@@ -33,7 +33,7 @@ public:
     MobState state;
 
 public:
-    Mob(ofVec2f center, double radius, int life, World *world_ptr);
+    Mob(ofVec2f center, World *world_ptr);
 
     void update_state();
     void update();
