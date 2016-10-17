@@ -6,10 +6,10 @@
 #include "boxContactListener.h"
 #include "bulletFactory.h"
 #include "building.h"
-
-#include "wall.h"
-
+// #include "wall.h"
 #include "Box2D/Box2D.h"
+
+#include <cstdint>
 
 #define MOB_MAX 1
 
@@ -17,12 +17,15 @@ class Mob;
 class Player;
 class Bullet;
 
-enum EntityCategory{
-    BUILDINGS   = 0x0001 ,
-    PLAYER      = 0x0002 ,
-    MOB         = 0x0004 ,
-    DEAD_MOB    = 0x0008 ,
-    BULLET      = 0x0010 ,
+// TODO check how to specifie values in enum class.
+// Or leave it as it is. It seems to work.
+class EntityCategory{
+public:
+    static const uint8_t BUILDINGS   = 0x0001;
+    static const uint8_t PLAYER      = 0x0002;
+    static const uint8_t MOB         = 0x0004;
+    static const uint8_t DEAD_MOB    = 0x0008;
+    static const uint8_t BULLET      = 0x0010;
 };
 
 class Wall;

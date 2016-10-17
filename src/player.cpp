@@ -15,9 +15,12 @@ Player::Player(ofVec2f center, World *world_ptr){
     this->radius    = world_ptr->get_param_double("player_radius");
     this->life      = world_ptr->get_param_double("player_life");
     this->world_ptr = world_ptr;
+    this->state     = PlayerState::STILL;
 
     speed_dir.set(0, 0);
     speed = 10;
+
+    // gun_time_stamp = chrono::steady_clock::now();
 
     string sprite_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
         string(world_ptr->game_parametrs["player_sprite_filename"]);
@@ -97,7 +100,7 @@ void Player::take_damage(int damage){
 }
 
 void Player::collision_event(worldEntity *collision_entity){
-    cout << "OOOOWOOOH\n";
+    // cout << "OOOOWOOOH\n";
     // Mob *m = dynamic_cast<Mob*>(collision_entity)
     // if (m != 0){
 

@@ -38,6 +38,4 @@ private:
 
     Sprite sprite;
     PlayerState state;
-
-    // std::chrono::time_point gun_time_stamp; 
 };

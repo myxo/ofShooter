@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 
 World::World(){
@@ -26,7 +27,6 @@ World::World(){
     
     building_array.push_back(std::make_shared<Building>(this));
     building_array[0]->building_from_file("../data/building");
-    cout << building_array[0]->vertex[0] << endl;
 
     for (int i = 0; i < MOB_MAX; i++){
         mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%30-15, std::rand()%30-15), this));
@@ -67,7 +67,10 @@ void World::update(){
 }
 
 void World::gun_fire(ofVec2f mouse_screen){
-    bullet_factory->create_bullets(mouse_screen);
+    // if (player->ready_to_fire()){
+    //     bullet_factory->create_bullets(mouse_screen);
+    // }
+    bullet_factory->fire(mouse_screen);
 }
 
 void World::bullet_cleanup(){
@@ -87,13 +90,18 @@ void World::display(){
     // ofPushMatrix();
     // ofTranslate(window_start_x, window_start_y);
 
-    for (auto mob: mob_array){
-        mob->display();
-    }
+    // for (auto mob: mob_array){
+    //     mob->display();
+    // }
+
+    // draw dead mob first
+    for_each(mob_array.begin(), mob_array.end(), [](auto &mob){ if (mob->state == MobState::DEAD) mob->display(); });
+    for_each(mob_array.begin(), mob_array.end(), [](auto &mob){ if (mob->state != MobState::DEAD) mob->display(); });
 
     for (auto bullet: bullet_array){
         bullet->display();
     }
+
 
     for (auto building: building_array){
         building->display();

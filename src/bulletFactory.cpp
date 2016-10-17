@@ -1,14 +1,40 @@
 #include "bulletFactory.h"
 
-BulletFactory::BulletFactory(World *world_ptr_) : world_ptr(world_ptr_){
-    active_gun = GunState::SHOTGUN;
+#include <chrono>
+
+using namespace std;
+
+BulletFactory::BulletFactory(World *world_ptr_) : world_ptr(world_ptr_), gun_fire_time_array(MAX_WEAPON_NUMBER){
+    active_gun = GunState::PISTOLE;
+    active_gun_index = 0;
+
+    for (auto &t: gun_fire_time_array){
+        t = chrono::steady_clock::now();
+    }
+
+    gun_refactoring_time.push_back( world_ptr->get_param_double("pistole_refactoring_time") );
+    gun_refactoring_time.push_back( world_ptr->get_param_double("shotgun_refactoring_time") );
 }
 
 void BulletFactory::change_gun(int num){
     switch(num){
-        case 1: active_gun = GunState::PISTOLE; break;
-        case 2: active_gun = GunState::SHOTGUN; break;
+        case 1: active_gun = GunState::PISTOLE; active_gun_index = 0; break;
+        case 2: active_gun = GunState::SHOTGUN; active_gun_index = 1; break;
     }
+}
+
+bool BulletFactory::fire(ofVec2f mouse_screen){
+    long time_milils = (std::chrono::duration_cast<chrono::milliseconds>
+        (chrono::steady_clock::now() - gun_fire_time_array[active_gun_index])).count();
+    
+    if (time_milils > gun_refactoring_time[active_gun_index]){
+        create_bullets(mouse_screen);
+        gun_fire_time_array[active_gun_index] = chrono::steady_clock::now(); 
+        return true;
+    }
+
+    return false;
+
 }
 
 void BulletFactory::create_bullets(ofVec2f mouse_screen){
@@ -16,8 +42,6 @@ void BulletFactory::create_bullets(ofVec2f mouse_screen){
         case GunState::PISTOLE : create_pistole_bullets(mouse_screen); break;
         case GunState::SHOTGUN : create_shotgun_bullets(mouse_screen); break;
     }
-
-    // world_ptr->player->gun_time_stamp = chrono::system_clock::now();
 }
 
 

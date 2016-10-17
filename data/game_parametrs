@@ -14,4 +14,5 @@ mob_dead_sprite_filename    mob_blood.png
 pistole_bullet_speed    45
 pistole_bullet_damage   10
 pistole_bullet_radius   0.1
-//pistole_bullet_damage   10
+pistole_refactoring_time    300
+shotgun_refactoring_time    800

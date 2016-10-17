@@ -48,7 +48,8 @@ void Mob::box_init(ofVec2f center){
     // fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = EntityCategory::MOB;
     // collide enttities
-    fixtureDef.filter.maskBits = BUILDINGS | MOB | BULLET | PLAYER ;
+    fixtureDef.filter.maskBits = EntityCategory::BUILDINGS | EntityCategory::MOB 
+            | EntityCategory::BULLET | EntityCategory::PLAYER ;
     box->CreateFixture(&fixtureDef);
 
     box->SetUserData(this);
