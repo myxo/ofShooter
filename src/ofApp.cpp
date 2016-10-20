@@ -12,6 +12,11 @@ void ofApp::setup(){
     world       = std::make_shared<World>();
     hud_screen  = std::make_shared<HUDScreen>(*world);
     hud_debug   = std::make_shared<HUDDebug>(*world);
+
+    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+    lum.allocate(ofGetWidth(), ofGetHeight(), GL_RED);
+
+    mask_shader.load("../../src/mask.vert", "../../src/mask.frag");
 }
 
 //--------------------------------------------------------------
@@ -21,7 +26,27 @@ void ofApp::update(){
 
 //-----------------,--------------------------------------------
 void ofApp::draw(){
+    lum.begin();
+    ofSetColor(0);
+    ofBackground(0);
+    ofSetColor(255, 255, 255);
+    ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 100);
+    lum.end();
+
+    fbo.begin();
     world->display();
+    fbo.end();
+
+    mask_shader.begin();
+    // fbo.getTexture().setAlphaMask(lum.getTexture());
+    mask_shader.setUniformTexture("texture", fbo.getTexture(), 1);
+    mask_shader.setUniformTexture("shadow_map_texture", lum.getTexture(), 1);
+
+    mask_shader.end();
+
+    ofSetColor(255, 255, 255);
+    fbo.draw(0,0);
+
     hud_screen->display();
     hud_debug->display();
 }

@@ -20,6 +20,7 @@ public:
     void change_gun(int num);
     bool fire(ofVec2f mouse_screen);
 
+    // TODO rename
     double get_gun_refactoring_ratio();
     
     GunState active_gun;
