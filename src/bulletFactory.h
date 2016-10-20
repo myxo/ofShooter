@@ -19,6 +19,8 @@ public:
     BulletFactory(World *world_ptr_);
     void change_gun(int num);
     bool fire(ofVec2f mouse_screen);
+
+    double get_gun_refactoring_ratio();
     
     GunState active_gun;
 

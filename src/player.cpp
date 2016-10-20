@@ -107,6 +107,8 @@ void Player::collision_event(worldEntity *collision_entity){
     // }
 }
 
+
+// TODO delete method
 ofVec2f Player::get_center(){
     get_center_screen();
     return get_center_box();

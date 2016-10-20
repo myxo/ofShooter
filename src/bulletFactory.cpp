@@ -1,6 +1,7 @@
 #include "bulletFactory.h"
 
 #include <chrono>
+#include <algorithm>
 
 using namespace std;
 
@@ -35,6 +36,12 @@ bool BulletFactory::fire(ofVec2f mouse_screen){
 
     return false;
 
+}
+
+double BulletFactory::get_gun_refactoring_ratio(){
+    long time_milils = (std::chrono::duration_cast<chrono::milliseconds>
+        (chrono::steady_clock::now() - gun_fire_time_array[active_gun_index])).count();
+    return min((double)time_milils / (double)gun_refactoring_time[active_gun_index], 1.0);
 }
 
 void BulletFactory::create_bullets(ofVec2f mouse_screen){

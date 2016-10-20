@@ -12,6 +12,7 @@ public:
 private:
     const World& world;
     void display_life(movingEntity* object);
+    void display_gun_refactoring_time();
 
     ofTrueTypeFont  gun_message_font;
 };
