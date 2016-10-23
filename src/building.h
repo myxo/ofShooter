@@ -2,6 +2,7 @@
 
 #include "worldEntity.h"
 #include "world.h"
+#include "level.h"
 
 #include <vector>
 #include "ofMain.h"
@@ -13,6 +14,7 @@ public:
     Building(World *world_ptr_);
     ~Building();
     void building_from_file(const char* filename);
+    void build_from_level_object(const LevelObject &object);
     void display();
 
     void collision_event(worldEntity *collision_entity);

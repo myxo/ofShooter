@@ -25,8 +25,21 @@ public:
     void change_seed();
     void change_seed(int seed);
 private:
-    vector<unique_ptr<ofImage>> frames;
+    vector<shared_ptr<ofImage>> frames;
     int frame_total, frame_number, seed = 0;
     double animationSpeed; 
 
+};
+
+
+
+class TileSet{
+public:
+    shared_ptr<ofImage> get_image_pointer(int tile_id);
+    void read_from_file(const char* filename, int tilewidth, int tileheight, int tilecount, int columns, int gap = 0, int offset = 0);
+
+    void draw_tileset(int x, int y);
+private:
+    vector<ofImage> tiles;
+    int tileWidth, tileHeight;
 };

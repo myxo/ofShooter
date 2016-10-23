@@ -25,7 +25,7 @@ void Sprite::parse_sprite_file(int col, int row, int sizeX, int sizeY, int offse
 }
 
 void Sprite::set_single_image_sprite(const char* filename){
-    frames.push_back(make_unique<ofImage>());
+    frames.push_back(make_shared<ofImage>());
     frames[0]->load(filename);
 
     frame_total     = 1;
@@ -75,3 +75,32 @@ void Sprite::set_frame_number_random(){
 // void Sprite::change_seed(int seed_){
 //     seed = seed_;
 // }
+
+
+
+shared_ptr<ofImage> TileSet::get_image_pointer(int tile_id){
+    return make_shared<ofImage>((tiles.at(tile_id)));
+}
+
+// offset - x and y offset from begining
+void TileSet::read_from_file(const char* filename, int tilewidth, int tileheight, int tilecount, int columns, int gap, int offset){
+    ofImage source;
+    source.load(filename);
+    tileWidth = tilewidth;
+    tileHeight = tileheight;
+
+    for (int i = 0; i < tilecount; i++){
+        tiles.push_back(ofImage());
+        int x = (i % columns) * (tilewidth + gap) + offset;
+        int y = (i / columns) * (tileheight + gap) + offset;
+        tiles[i].cropFrom(source, x, y, tilewidth, tileheight);
+    }
+}
+
+
+// For debug purpose only!
+void TileSet::draw_tileset(int x, int y){
+    for (size_t i = 0; i < tiles.size(); i++){
+        tiles[i].draw((tileWidth + 2) * i + x, y);
+    }
+}

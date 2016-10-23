@@ -25,7 +25,7 @@ void HUDScreen::display(){
     }
     display_gun_refactoring_time();
 
-    ofSetColor(0,0,0);
+    ofSetColor(255,0,0);
     if (world.bullet_factory->active_gun == GunState::PISTOLE){
         gun_message_font.drawString("PISTOLE", 200, 50);
     } else if (world.bullet_factory->active_gun == GunState::SHOTGUN){

@@ -6,6 +6,7 @@
 #include "boxContactListener.h"
 #include "bulletFactory.h"
 #include "building.h"
+#include "level.h"
 // #include "wall.h"
 #include "Box2D/Box2D.h"
 
@@ -59,6 +60,7 @@ public:
 // private:
     std::shared_ptr<Player>                 player;
     std::shared_ptr<BulletFactory>          bullet_factory;
+    std::shared_ptr<Level>                  level;
     std::vector<std::shared_ptr<Mob>>       mob_array;
     std::vector<std::shared_ptr<Bullet>>    bullet_array;
     std::vector<std::shared_ptr<Building>>  building_array;
@@ -72,7 +74,7 @@ public:
     float32 prev_frame_time;
     int window_start_x = 0, window_start_y = 0; // for screen transition
 
-    const int WINDOW_BOUND_TO_EXTEND_X = 250; // todo. rename + if screen is big, get 1/5 of window_width
-    const int WINDOW_BOUND_TO_EXTEND_Y = 200; // todo. -//-
+    const int WINDOW_BOUND_TO_EXTEND_X = 50; // todo. rename + if screen is big, get 1/5 of window_width
+    const int WINDOW_BOUND_TO_EXTEND_Y = 20; // todo. -//-
     static const int WORLD_RESOLUTION = 16; // pixels in meter
 };

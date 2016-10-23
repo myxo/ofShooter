@@ -22,11 +22,22 @@ World::World(){
     
     game_parametrs = parse_config_file("../data/game_parametrs");
 
-    player          = std::make_shared<Player>(ofVec2f(0, 0), this);
     bullet_factory  = std::make_shared<BulletFactory>(this);
+    level           = std::make_shared<Level>();
     
-    building_array.push_back(std::make_shared<Building>(this));
-    building_array[0]->building_from_file("../data/building");
+    level->load_from_file("../data/level_0.tmx");
+    level->make_static_background_texture();
+    
+    LevelObject p_object = level->get_object("player");
+    player = std::make_shared<Player>(transformeScreenToBoxCoorditane(ofVec2f(p_object.x0, p_object.y0)), this);
+
+    vector<LevelObject> b_object_vector = level->get_objects(string("building"));
+    for (auto build_object: b_object_vector){
+        building_array.push_back(std::make_shared<Building>(this));
+        building_array.back()->build_from_level_object(build_object);
+        cout << building_array.back()->vertex[0] << "\t" << building_array.back()->vertex[1] << endl;
+    }
+    // building_array[0]->building_from_file("../data/building");
 
     for (int i = 0; i < MOB_MAX; i++){
         mob_array.push_back(std::make_shared<Mob>(ofVec2f(std::rand()%30-15, std::rand()%30-15), this));
@@ -85,8 +96,8 @@ void World::bullet_cleanup(){
 
 void World::display(){
     update_window_boundary();
-    display_tile_background(tile);
-
+    // display_tile_background(tile);
+    level->display();
     // ofPushMatrix();
     // ofTranslate(window_start_x, window_start_y);
 
@@ -103,9 +114,9 @@ void World::display(){
     }
 
 
-    for (auto building: building_array){
-        building->display();
-    }
+    // for (auto building: building_array){
+    //     building->display();
+    // }
 
     player->display();
 
@@ -115,41 +126,41 @@ void World::display(){
 
 
 b2Vec2 World::transformeBoxToScreenCoorditane(b2Vec2 coord){
-    int h = ofGetWindowHeight();
-    int w = ofGetWindowWidth();
+    // int h = ofGetWindowHeight();
+    // int w = ofGetWindowWidth();
 
-    coord.x = coord.x * WORLD_RESOLUTION + w/2 - window_start_x;
-    coord.y = coord.y * WORLD_RESOLUTION + h/2 - window_start_y;
+    coord.x = coord.x * WORLD_RESOLUTION - window_start_x;
+    coord.y = coord.y * WORLD_RESOLUTION - window_start_y;
     return coord;
 }
 
 
 b2Vec2 World::transformeScreenToBoxCoorditane(b2Vec2 coord){
-    int h = ofGetWindowHeight();
-    int w = ofGetWindowWidth();
+    // int h = ofGetWindowHeight();
+    // int w = ofGetWindowWidth();
 
-    coord.x = (coord.x - w/2 + window_start_x) / WORLD_RESOLUTION;
-    coord.y = (coord.y - h/2 + window_start_y) / WORLD_RESOLUTION;
+    coord.x = (coord.x + window_start_x) / WORLD_RESOLUTION;
+    coord.y = (coord.y + window_start_y) / WORLD_RESOLUTION;
     return coord;
 }
 
 
 ofVec2f World::transformeBoxToScreenCoorditane(ofVec2f coord){
-    int h = ofGetWindowHeight();
-    int w = ofGetWindowWidth();
+    // int h = ofGetWindowHeight();
+    // int w = ofGetWindowWidth();
 
-    coord.x = coord.x * WORLD_RESOLUTION + w/2 - window_start_x;
-    coord.y = coord.y * WORLD_RESOLUTION + h/2 - window_start_y;
+    coord.x = coord.x * WORLD_RESOLUTION - window_start_x;
+    coord.y = coord.y * WORLD_RESOLUTION - window_start_y;
     return coord;
 }
 
 
 ofVec2f World::transformeScreenToBoxCoorditane(ofVec2f coord){
-    int h = ofGetWindowHeight();
-    int w = ofGetWindowWidth();
+    // int h = ofGetWindowHeight();
+    // int w = ofGetWindowWidth();
 
-    coord.x = (coord.x - w/2 + window_start_x) / WORLD_RESOLUTION;
-    coord.y = (coord.y - h/2 + window_start_y) / WORLD_RESOLUTION;
+    coord.x = (coord.x + window_start_x) / WORLD_RESOLUTION;
+    coord.y = (coord.y + window_start_y) / WORLD_RESOLUTION;
     return coord;
 }
 
