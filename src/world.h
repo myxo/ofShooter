@@ -7,16 +7,19 @@
 #include "bulletFactory.h"
 #include "building.h"
 #include "level.h"
+#include "gameParameter.h"
+#include "camera.h"
 // #include "wall.h"
 #include "Box2D/Box2D.h"
 
 #include <cstdint>
 
-#define MOB_MAX 1
+#define MOB_MAX 2
 
 class Mob;
 class Player;
 class Bullet;
+class Camera;
 
 // TODO check how to specifie values in enum class.
 // Or leave it as it is. It seems to work.
@@ -43,28 +46,20 @@ public:
     void gun_fire(ofVec2f mouse_screen);
     void bullet_cleanup();
 
-    b2Vec2 transformeBoxToScreenCoorditane(b2Vec2 coord);
-    ofVec2f transformeBoxToScreenCoorditane(ofVec2f coord);
-    b2Vec2 transformeScreenToBoxCoorditane(b2Vec2 coord);
-    ofVec2f transformeScreenToBoxCoorditane(ofVec2f coord);
+
     static ofVec2f box2of(b2Vec2 a);
     static b2Vec2 of2box(ofVec2f a);
 
-    double get_param_double(string param_key);
-
-    // Wall *w;
-
-    void update_window_boundary();
-    void display_tile_background(ofImage tile);
-    // void generate_tile_background(const char* filename);
+    // void display_tile_background(ofImage tile);
 // private:
     std::shared_ptr<Player>                 player;
     std::shared_ptr<BulletFactory>          bullet_factory;
     std::shared_ptr<Level>                  level;
+    std::shared_ptr<Camera>                 camera;
     std::vector<std::shared_ptr<Mob>>       mob_array;
     std::vector<std::shared_ptr<Bullet>>    bullet_array;
     std::vector<std::shared_ptr<Building>>  building_array;
-    std::unordered_map<string, string>      game_parametrs;
+    GameParameter                           game_parameters;
 
     std::shared_ptr<b2World>                box2d_world;
     ofImage                                 background_image;
@@ -72,9 +67,4 @@ public:
 
     ContactListener* CL;
     float32 prev_frame_time;
-    int window_start_x = 0, window_start_y = 0; // for screen transition
-
-    const int WINDOW_BOUND_TO_EXTEND_X = 50; // todo. rename + if screen is big, get 1/5 of window_width
-    const int WINDOW_BOUND_TO_EXTEND_Y = 20; // todo. -//-
-    static const int WORLD_RESOLUTION = 16; // pixels in meter
 };

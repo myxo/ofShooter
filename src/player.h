@@ -19,6 +19,7 @@ enum class PlayerState{
 class Player : public movingEntity{
 public:
     Player(ofVec2f center, World *world_ptr);
+    ~Player();
     void box_init();
 
     void update();

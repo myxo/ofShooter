@@ -6,12 +6,23 @@
 
 size_t worldEntity::obj_count = 0;
 
+worldEntity::worldEntity(){
+        obj_id = obj_count++;
+}
+
+worldEntity::~worldEntity(){
+    if (box != nullptr){
+        box->GetWorld()->DestroyBody( box );
+    }
+}
+
 ofVec2f worldEntity::get_center_box() const{
     b2Vec2 p = box->GetPosition();
     ofVec2f center(p.x, p.y);
     return center;
 }
+
 ofVec2f worldEntity::get_center_screen() const{
-    ofVec2f center = World::box2of(world_ptr->transformeBoxToScreenCoorditane(box->GetPosition()));
+    ofVec2f center = World::box2of(world_ptr->camera->transformeBoxToScreenCoorditane(box->GetPosition()));
     return center;
 }

@@ -9,11 +9,8 @@ class World;
 
 class worldEntity{
 public:
-    worldEntity(){
-        obj_id = obj_count++;
-    }
-
-    // virtual ~worldEntity(){}
+    worldEntity();
+    virtual ~worldEntity();
     
     virtual void collision_event(worldEntity *) = 0;
     
@@ -27,6 +24,6 @@ private:
     static size_t obj_count;
     
 protected:
-    b2Body  *box;
+    b2Body  *box = nullptr;
     World *world_ptr;
 };

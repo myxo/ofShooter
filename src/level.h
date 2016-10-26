@@ -36,7 +36,7 @@ public:
     LevelObject get_object(string name);
     vector<LevelObject> get_objects(string name);
     void make_static_background_texture();
-    void display();
+    void display(int x, int y);
 
 private:
     vector<LevelObject> object_array;

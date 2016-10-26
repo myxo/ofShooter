@@ -10,25 +10,31 @@
 
 
 Mob::Mob(ofVec2f center, World *world_ptr){
-    this->center    = center;
-    this->radius    = world_ptr->get_param_double("mob_radius");
-    this->life      = world_ptr->get_param_double("mob_life");
+    try{
+        this->center    = center;
+        this->radius    = world_ptr->game_parameters.getDouble("mob_radius");
+        this->life      = world_ptr->game_parameters.getDouble("mob_life");
 
-    this->world_ptr = world_ptr;
+        this->world_ptr = world_ptr;
 
-    speed = world_ptr->get_param_double("mob_speed");
-    state = MobState::MAY_ATTACK;
+        speed = world_ptr->game_parameters.getDouble("mob_speed");
+        state = MobState::MAY_ATTACK;
 
-    string sprite_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
-        string(world_ptr->game_parametrs["mob_sprite_filename"]);
-    string sprite_dead_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
-        string(world_ptr->game_parametrs["mob_dead_sprite_filename"]);
-    sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, sprite_path.c_str(), 0.2);
-    dead_sprite.set_single_image_sprite(sprite_dead_path.c_str());
-    sprite.set_frame_number_random();
+        string sprite_path = string(world_ptr->game_parameters.getString("sprite_root_folder")) + 
+            string(world_ptr->game_parameters.getString("mob_sprite_filename"));
+        string sprite_dead_path = string(world_ptr->game_parameters.getString("sprite_root_folder")) + 
+            string(world_ptr->game_parameters.getString("mob_dead_sprite_filename"));
+        sprite.parse_sprite_file(8, 1, 48, 48, 1, 1, sprite_path.c_str(), 0.2);
+        dead_sprite.set_single_image_sprite(sprite_dead_path.c_str());
+        sprite.set_frame_number_random();
+    } catch (std::exception &e){
+        cout << "ERROR in mob constructor: " << e.what() << endl;
+    }
 
     box_init(center);
 }
+
+Mob::~Mob(){}
 
 
 // box2d fixture initialize routine
@@ -73,7 +79,7 @@ void Mob::update(){
 
 void Mob::display(){
     b2Vec2 position = box->GetPosition();
-    b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position);
+    b2Vec2 screen_coord = world_ptr->camera->transformeBoxToScreenCoorditane(position);
 
     if (state == MobState::DEAD){
         dead_sprite.display(screen_coord,b2Vec2(0,1));

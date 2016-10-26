@@ -11,23 +11,29 @@
 #include "Box2D/Box2D.h"
 
 Player::Player(ofVec2f center, World *world_ptr){
-    this->center    = center;
-    this->radius    = world_ptr->get_param_double("player_radius");
-    this->life      = world_ptr->get_param_double("player_life");
-    this->world_ptr = world_ptr;
-    this->state     = PlayerState::STILL;
+    try{
+        this->center    = center;
+        this->radius    = world_ptr->game_parameters.getDouble("player_radius");
+        this->life      = world_ptr->game_parameters.getDouble("player_life");
+        this->world_ptr = world_ptr;
+        this->state     = PlayerState::STILL;
 
-    speed_dir.set(0, 0);
-    speed = 10;
+        speed_dir.set(0, 0);
+        speed = 10;
 
-    // gun_time_stamp = chrono::steady_clock::now();
+        // gun_time_stamp = chrono::steady_clock::now();
 
-    string sprite_path = string(world_ptr->game_parametrs["sprite_root_folder"]) + 
-        string(world_ptr->game_parametrs["player_sprite_filename"]);
-    sprite.parse_sprite_file(8, 1, 32, 54, 1, 1, sprite_path.c_str(), 0.4);
+        string sprite_path = string(world_ptr->game_parameters.getString("sprite_root_folder")) + 
+            string(world_ptr->game_parameters.getString("player_sprite_filename"));
+        sprite.parse_sprite_file(8, 1, 32, 54, 1, 1, sprite_path.c_str(), 0.4);
+    } catch (std::exception &e){
+        cout << "ERROR in player constructor: " << e.what() << endl;
+    }
 
     box_init();
 }
+
+Player::~Player(){}
 
 void Player::box_init(){
     b2BodyDef bodyDef;
@@ -61,7 +67,7 @@ void Player::display(){
     ofSetColor(0, 0, 255);
 
     b2Vec2 position = box->GetPosition();
-    b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position);
+    b2Vec2 screen_coord = world_ptr->camera->transformeBoxToScreenCoorditane(position);
     // ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
     b2Vec2 heading(ofGetAppPtr()->mouseX - screen_coord.x, ofGetAppPtr()->mouseY - screen_coord.y);
 
