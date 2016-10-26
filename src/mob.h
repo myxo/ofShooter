@@ -34,6 +34,7 @@ public:
 
 public:
     Mob(ofVec2f center, World *world_ptr);
+    ~Mob();
 
     void update_state();
     void update();

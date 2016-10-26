@@ -13,8 +13,8 @@ BulletFactory::BulletFactory(World *world_ptr_) : world_ptr(world_ptr_), gun_fir
         t = chrono::steady_clock::now();
     }
 
-    gun_refactoring_time.push_back( world_ptr->get_param_double("pistole_refactoring_time") );
-    gun_refactoring_time.push_back( world_ptr->get_param_double("shotgun_refactoring_time") );
+    gun_refactoring_time.push_back( world_ptr->game_parameters.getDouble("pistole_refactoring_time") );
+    gun_refactoring_time.push_back( world_ptr->game_parameters.getDouble("shotgun_refactoring_time") );
 }
 
 void BulletFactory::change_gun(int num){
@@ -53,19 +53,20 @@ void BulletFactory::create_bullets(ofVec2f mouse_screen){
 
 
 void BulletFactory::create_pistole_bullets(ofVec2f mouse_screen){
-    ofVec2f mouse_box = world_ptr->box2of(world_ptr->transformeScreenToBoxCoorditane(b2Vec2(mouse_screen.x, mouse_screen.y)));
+    ofVec2f mouse_box = world_ptr->box2of(world_ptr->camera->transformeScreenToBoxCoorditane(b2Vec2(mouse_screen.x, mouse_screen.y)));
     ofVec2f player_center = world_ptr->player->get_center_box();
     ofVec2f speed_dir(mouse_box.x - player_center.x, mouse_box.y - player_center.y);
     speed_dir.normalize();
     player_center += (speed_dir * 0.5);
-    speed_dir *= world_ptr->get_param_double("pistole_bullet_speed"); // TODO remove magic numbers
+    speed_dir *= world_ptr->game_parameters.getDouble("pistole_bullet_speed");
+
 
     world_ptr->bullet_array.push_back(std::make_shared<Pistole>(player_center, speed_dir, world_ptr));
 }
 
 
 void BulletFactory::create_shotgun_bullets(ofVec2f mouse_screen){
-    ofVec2f mouse_box = world_ptr->box2of(world_ptr->transformeScreenToBoxCoorditane(b2Vec2(mouse_screen.x, mouse_screen.y)));
+    ofVec2f mouse_box = world_ptr->box2of(world_ptr->camera->transformeScreenToBoxCoorditane(b2Vec2(mouse_screen.x, mouse_screen.y)));
     ofVec2f player_center = world_ptr->player->get_center_box();
     ofVec2f speed_dir(mouse_box.x - player_center.x, mouse_box.y - player_center.y);
     speed_dir.normalize();

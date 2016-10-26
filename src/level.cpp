@@ -48,9 +48,9 @@ vector<LevelObject> Level::get_objects(string name){
 
 
 // TODO mae propper transition from texture to screen coord
-void Level::display(){
+void Level::display(int x, int y){
     ofSetColor(255, 255, 255);
-    static_background.draw(0, 0);
+    static_background.draw(x, y);
 }
 
 
@@ -143,23 +143,27 @@ void Level::load_from_file(const char* filename){
     if (object_group == nullptr){
         cout << "ERROR object_group == null";
     }
-    XMLElement *object = object_group->FirstChildElement("object");
+    while (object_group != nullptr){
+        XMLElement *object = object_group->FirstChildElement("object");
 
-    while (object != nullptr){
-        LevelObject obj;
-        // string name;
-        obj.name = object->Attribute("name");
+        while (object != nullptr){
+            LevelObject obj;
+            // string name;
+            obj.name = object->Attribute("name");
 
-        if (object->Attribute("type") != NULL){
-            obj.type = object->Attribute("type");
+            if (object->Attribute("type") != NULL){
+                obj.type = object->Attribute("type");
+            }
+            obj.x0 = stod(object->Attribute("x"));
+            obj.y0 = stod(object->Attribute("y"));
+            obj.width = stod(object->Attribute("width"));
+            obj.height = stod(object->Attribute("height"));
+
+            object_array.push_back(obj);
+            object = object->NextSiblingElement("object");
         }
-        obj.x0 = stod(object->Attribute("x"));
-        obj.y0 = stod(object->Attribute("y"));
-        obj.width = stod(object->Attribute("width"));
-        obj.height = stod(object->Attribute("height"));
 
-        object_array.push_back(obj);
-        object = object->NextSiblingElement("object");
+        object_group = object_group->NextSiblingElement("objectgroup");
     }
 
 

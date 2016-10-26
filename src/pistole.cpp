@@ -1,15 +1,22 @@
+#include <exception>
+
 #include "pistole.h"
 #include "world.h"
 
 #include "ofMain.h"
 
 
+
 Pistole::Pistole(ofVec2f center, ofVec2f speed_dir, World *world_ptr) : movingEntity(){
     this->world_ptr = world_ptr;
     this->speed_dir = speed_dir;
     state = BulletState::EXIST;
-    radius = world_ptr->get_param_double("pistole_bullet_radius");
-    damage = world_ptr->get_param_double("pistole_bullet_damage");
+    try{
+        radius = world_ptr->game_parameters.getDouble("pistole_bullet_radius");
+        damage = world_ptr->game_parameters.getDouble("pistole_bullet_damage");
+    } catch (std::exception& e){
+        cout << "Error in pistole constructor: " << e.what() << endl;
+    }
 
     init_box(center);
 
@@ -58,9 +65,9 @@ void Pistole::display(){
     if (state == BulletState::EXIST){
         ofSetColor(50, 50, 200);
         b2Vec2 position = box->GetPosition();
-        b2Vec2 screen_coord = world_ptr->transformeBoxToScreenCoorditane(position); // TODO add sprite???
+        b2Vec2 screen_coord = world_ptr->camera->transformeBoxToScreenCoorditane(position); // TODO add sprite???
         // draw in double size (overwise its hard to see them)
-        ofDrawCircle(screen_coord.x, screen_coord.y, 2*radius * World::WORLD_RESOLUTION); 
+        ofDrawCircle(screen_coord.x, screen_coord.y, 2*radius * 16); // TODO add sprite!! and no magic number 
     }
 }
 

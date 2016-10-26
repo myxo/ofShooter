@@ -57,22 +57,24 @@ void Building::building_from_file(const char* filename){
     box_init();
 }
 
+
+// TODO make polygon (not rect)
 void Building::build_from_level_object(const LevelObject &object){
     ofVec2f v[4] = { ofVec2f(object.x0, object.y0)
                 , ofVec2f(object.x0, object.y0 + object.height)
                 , ofVec2f(object.x0 + object.width, object.y0 + object.height)
                 , ofVec2f(object.x0 + + object.width, object.y0)};
-    vertex.push_back(world_ptr->transformeScreenToBoxCoorditane(v[3]));
-    vertex.push_back(world_ptr->transformeScreenToBoxCoorditane(v[2]));
-    vertex.push_back(world_ptr->transformeScreenToBoxCoorditane(v[1]));
-    vertex.push_back(world_ptr->transformeScreenToBoxCoorditane(v[0]));
+    vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[3]));
+    vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[2]));
+    vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[1]));
+    vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[0]));
 
     box_init();
 }
 
 ofVec2f Building::get_vertex_screen_coord(int i){
     ofVec2f res = get_center_box() + vertex[i];
-    return world_ptr->transformeBoxToScreenCoorditane(res);
+    return world_ptr->camera->transformeBoxToScreenCoorditane(res);
 }
 
 void Building::display(){
