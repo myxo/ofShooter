@@ -17,7 +17,7 @@ public:
     double x0, y0, width, height;
     map<string, string> properties;
 
-    shared_ptr<Sprite> sprite;
+    // shared_ptr<Sprite> sprite;
 };
 
 struct Layer{

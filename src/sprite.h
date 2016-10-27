@@ -36,7 +36,7 @@ private:
 class TileSet{
 public:
     shared_ptr<ofImage> get_image_pointer(int tile_id);
-    void read_from_file(const char* filename, int tilewidth, int tileheight, int tilecount, int columns, int gap = 0, int offset = 0);
+    void read_from_file(const char* filename, int tilewidth, int tileheight, int tilecount, int columns, int gap, int offset);
 
     void draw_tileset(int x, int y);
 private:

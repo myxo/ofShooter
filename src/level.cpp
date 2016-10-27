@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <stdexcept>
 
 #include "level.h"
 
@@ -80,13 +81,13 @@ void Level::load_from_file(const char* filename){
     XMLDocument xmlDoc;
     auto errId = xmlDoc.LoadFile(filename);
     if (errId != 0){
-        cout << "ERROR in load_from_file\n";
+        throw std::invalid_argument("Cannot open level tmx file");
     }
 
-    // XMLElement * pMap = xmlDoc.FirstChildElement("map");
     XMLElement * pMap = xmlDoc.FirstChildElement("map");
-    if (pMap == nullptr) cout << "ERROR pMap = nullptr\n";
-    // XMLElement *
+    if (pMap == nullptr) {
+        throw string("No map section. XML level file is broken");
+    }
     
     pMap->QueryIntAttribute("width", &width);
     pMap->QueryIntAttribute("height", &height);
@@ -94,7 +95,7 @@ void Level::load_from_file(const char* filename){
     pMap->QueryIntAttribute("tileheight", &tile_height);
 
 
-    // parse tileset TODO check for multiple tileset + check gap and offset
+    // parse tileset TODO check for multiple tileset + check gap and offset + firstgid
     XMLElement *tileset_ptr = pMap->FirstChildElement("tileset");
     int tileWidth, tileHeight, tileCount, columns;
     tileset_ptr->QueryIntAttribute("tilewidth", &tileWidth);
@@ -102,29 +103,39 @@ void Level::load_from_file(const char* filename){
     tileset_ptr->QueryIntAttribute("tilecount", &tileCount);
     tileset_ptr->QueryIntAttribute("columns", &columns);
 
+    int spacing = 0, margin = 0;
+    if (tileset_ptr->Attribute("spacing") != NULL) {
+        tileset_ptr->QueryIntAttribute("spacing", &spacing);
+    }
+    if (tileset_ptr->Attribute("margin") != NULL) {
+        tileset_ptr->QueryIntAttribute("margin", &margin);
+    }
+
     XMLElement *image_ptr = tileset_ptr->FirstChildElement("image");
     string image_filename = image_ptr->Attribute("source");
     string image_root = string("../../data/");
-    tileset.read_from_file((image_root + image_filename).c_str(), tileWidth, tileHeight, tileCount, columns);
+    // TODO add multiple tileset (should be easy)
+    // may throw exception
+    tileset.read_from_file((image_root + image_filename).c_str(), tileWidth, tileHeight, tileCount, columns, spacing, margin);
 
 
 
 
     // parse layers
-    XMLElement *layer = pMap->FirstChildElement("layer");
-    if (layer == nullptr){
-        cout << "ERROR in layer read\n";
+    XMLElement *layer_ptr = pMap->FirstChildElement("layer");
+    if (layer_ptr == nullptr){
+        throw string("No layer section. XML level file is broken.");
     }
 
-    while(layer != nullptr){
+    while(layer_ptr != nullptr){
         Layer l;
-        XMLElement *data_ptr = layer->FirstChildElement("data");
+        XMLElement *data_ptr = layer_ptr->FirstChildElement("data");
         if (data_ptr == nullptr){
-            cout << "ERROR data_ptr == null";
+            throw string("No data section with Layer section. XML level file is broken.");
         }
         XMLElement *tile_ptr = data_ptr->FirstChildElement("tile");
         if (tile_ptr == nullptr){
-            cout << "ERROR tile_ptr == null";
+            throw string("No tile section with Layer section. XML level file is broken.");
         }
         while(tile_ptr != nullptr){
             int gid;
@@ -134,58 +145,40 @@ void Level::load_from_file(const char* filename){
             tile_ptr = tile_ptr->NextSiblingElement("tile");
         }
         layer_array.push_back(l);
-        layer = layer->NextSiblingElement("layer");
+        layer_ptr = layer_ptr->NextSiblingElement("layer");
     }
 
 
     // parse objects
-    XMLElement *object_group = pMap->FirstChildElement("objectgroup");
-    if (object_group == nullptr){
-        cout << "ERROR object_group == null";
-    }
-    while (object_group != nullptr){
-        XMLElement *object = object_group->FirstChildElement("object");
-
-        while (object != nullptr){
-            LevelObject obj;
-            // string name;
-            obj.name = object->Attribute("name");
-
-            if (object->Attribute("type") != NULL){
-                obj.type = object->Attribute("type");
-            }
-            obj.x0 = stod(object->Attribute("x"));
-            obj.y0 = stod(object->Attribute("y"));
-            obj.width = stod(object->Attribute("width"));
-            obj.height = stod(object->Attribute("height"));
-
-            object_array.push_back(obj);
-            object = object->NextSiblingElement("object");
+    XMLElement *object_group_ptr = pMap->FirstChildElement("objectgroup");
+    // if (object_group_ptr == nullptr){
+    //     cout << "ERROR object_group_ptr == null";
+    // }
+    while (object_group_ptr != nullptr){
+        XMLElement *object_ptr = object_group_ptr->FirstChildElement("object");
+        if (object_ptr == nullptr){
+            throw string("No Object section with ObjectGroup section. XML level file is broken.");
         }
 
-        object_group = object_group->NextSiblingElement("objectgroup");
+        while (object_ptr != nullptr){
+            LevelObject obj;
+            // string name;
+            if (object_ptr->Attribute("name") != NULL){
+                obj.name = object_ptr->Attribute("name");
+            }
+
+            if (object_ptr->Attribute("type") != NULL){
+                obj.type = object_ptr->Attribute("type");
+            }
+            obj.x0 = stod(object_ptr->Attribute("x"));
+            obj.y0 = stod(object_ptr->Attribute("y"));
+            obj.width = stod(object_ptr->Attribute("width"));
+            obj.height = stod(object_ptr->Attribute("height"));
+
+            object_array.push_back(obj);
+            object_ptr = object_ptr->NextSiblingElement("object");
+        }
+
+        object_group_ptr = object_group_ptr->NextSiblingElement("objectgroup");
     }
-
-
-    //debug print
-
-    // cout << width << " " << height << " " << tile_width << " " << tile_height << "\n";
-    // for  (auto l : layer_array){
-    //     cout << "layer:\n";
-    //     for (int tile: l.tiles){
-    //         cout << tile << " ";
-    //     }
-    //     cout << "\n";
-    // }
-    // cout << "-----------------\n";
-    // for (auto obj: object_array){
-    //     cout << "object " << obj.name << " " << obj.type << endl;
-    //     cout << obj.x0 << " " << obj.y0 << " " << obj.width << " " << obj.height << endl;
-    //     //cout << obj.properties << "\n\n";
-
-    //     for (const auto &p: obj.properties){
-    //         cout << "p[" << p.first << "] = " << p.second << endl;
-    //     }
-    //     cout << endl;
-    // }
 }

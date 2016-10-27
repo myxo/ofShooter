@@ -13,8 +13,12 @@ BulletFactory::BulletFactory(World *world_ptr_) : world_ptr(world_ptr_), gun_fir
         t = chrono::steady_clock::now();
     }
 
-    gun_refactoring_time.push_back( world_ptr->game_parameters.getDouble("pistole_refactoring_time") );
-    gun_refactoring_time.push_back( world_ptr->game_parameters.getDouble("shotgun_refactoring_time") );
+    try{
+        gun_refactoring_time.push_back( world_ptr->game_parameters.getDouble("pistole_refactoring_time") );
+        gun_refactoring_time.push_back( world_ptr->game_parameters.getDouble("shotgun_refactoring_time") );
+    } catch (std::exception &e){
+        cout << "ERROR in bulletFactory constructor: no such parametr, " << e.what() << endl;
+    }
 }
 
 void BulletFactory::change_gun(int num){

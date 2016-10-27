@@ -48,13 +48,15 @@ World::World(){
         }
 
         tile.load("../../data/bg.png");
+    } catch (string e){
+        cout << "ERROR in world constrctor: " << e << endl;
+        exit(1);
     } catch(std::exception &e){
         cout << "ERROR in world constrctor: " << e.what() << endl;
         exit(1);
     }
 
     camera->set_camera_center(player.get());
-    // w = new Wall(ofVec2f(-10, 0), ofVec2f(10, 0), this);
 }
 
 World::~World(){
