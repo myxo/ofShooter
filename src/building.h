@@ -9,17 +9,16 @@
 
 class Building : public worldEntity{
 public:
-    vector<ofVec2f> vertex;
-
     Building(World *world_ptr_);
     ~Building();
+
     void building_from_file(const char* filename);
     void build_from_level_object(const LevelObject &object);
     void display();
-
     void collision_event(worldEntity *collision_entity);
+
 private:
+    vector<ofVec2f> vertex;
     void box_init();
     ofVec2f get_vertex_screen_coord(int i);
-    // World *world_ptr;
 };

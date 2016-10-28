@@ -6,7 +6,6 @@
 class HUDScreen{
 public:
     HUDScreen(const World& world);
-
     void display();
 
 private:

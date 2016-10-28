@@ -9,6 +9,9 @@ mob_speed    5
 mob_radius   0.7
 mob_life 20
 mob_max_life 20
+mob_damage  5
+mob_rest_time_ms    1000
+mob_attack_radius   1.0
 mob_sprite_filename  bloatedzombonewalking.png
 mob_dead_sprite_filename    mob_blood.png
 pistole_bullet_speed    45

@@ -12,8 +12,8 @@ public:
     Sprite();
     Sprite(int seed_);
     
-    void display(b2Vec2 position, b2Vec2 heading, double scaleX = 1.0, double scaleY = 1.0);
-    void display_still(b2Vec2 position, b2Vec2 heading, double scaleX = 1.0, double scaleY = 1.0);
+    void display(ofVec2f position, ofVec2f heading, double scaleX = 1.0, double scaleY = 1.0);
+    void display_still(ofVec2f position, ofVec2f heading, double scaleX = 1.0, double scaleY = 1.0);
 
     void parse_sprite_file(int col, int row, int sizeX, int sizeY, int offset, 
             int separation, const char* filename, double animationSpeed = 1.0);

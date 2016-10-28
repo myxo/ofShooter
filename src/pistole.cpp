@@ -40,8 +40,6 @@ void Pistole::init_box(ofVec2f center){
     dynamicBox.m_radius = radius;
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 0.05f;
-    fixtureDef.friction = 0.1f;
 
     fixtureDef.filter.categoryBits = EntityCategory::BULLET;
     fixtureDef.filter.maskBits = EntityCategory::BUILDINGS | EntityCategory::MOB;
@@ -52,7 +50,6 @@ void Pistole::init_box(ofVec2f center){
 
 void Pistole::update(){
     box->SetLinearVelocity(b2Vec2(speed_dir.x, speed_dir.y));
-    // auto pos = box->GetPosition();
     auto pos = get_center_screen();
     if(pos.x > 2 * ofGetWidth() || pos.y > 2 * ofGetHeight()     // TODO this is just some euristic 
         || pos.x < -ofGetWidth() || pos.y < -ofGetHeight()){     // think how it would be better 

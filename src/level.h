@@ -21,14 +21,11 @@ public:
 };
 
 struct Layer{
-    // void display();
-
     vector<shared_ptr<ofImage>> tiles;
     int opacity;
 };
 
 
-// TODO makor refactor (var names)
 class Level{
 public:
     Level();

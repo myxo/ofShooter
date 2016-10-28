@@ -7,7 +7,6 @@
 class HUDDebug{
 public:
     HUDDebug(const World& world_);
-
     void display();
 
 private:

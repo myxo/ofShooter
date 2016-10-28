@@ -11,6 +11,17 @@
 #include "Box2D/Box2D.h"
 
 Player::Player(ofVec2f center, World *world_ptr){
+    player_init(center, world_ptr);
+}
+
+Player::Player(LevelObject &lObject, World *world_ptr){
+    ofVec2f center = world_ptr->camera->transformeScreenToBoxCoorditane(ofVec2f(lObject.x0, lObject.y0));
+    player_init(center, world_ptr);
+}
+
+Player::~Player(){}
+
+void Player::player_init(ofVec2f center, World *world_ptr){
     try{
         this->center    = center;
         this->radius    = world_ptr->game_parameters.getDouble("player_radius");
@@ -20,8 +31,7 @@ Player::Player(ofVec2f center, World *world_ptr){
 
         speed_dir.set(0, 0);
         speed = 10;
-
-        // gun_time_stamp = chrono::steady_clock::now();
+        MAX_LIFE = life;
 
         string sprite_path = string(world_ptr->game_parameters.getString("sprite_root_folder")) + 
             string(world_ptr->game_parameters.getString("player_sprite_filename"));
@@ -32,8 +42,6 @@ Player::Player(ofVec2f center, World *world_ptr){
 
     box_init();
 }
-
-Player::~Player(){}
 
 void Player::box_init(){
     b2BodyDef bodyDef;
@@ -47,8 +55,6 @@ void Player::box_init(){
     dynamicBox.m_radius = radius;
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 15.0f;
-    fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = EntityCategory::PLAYER;
     fixtureDef.filter.maskBits = EntityCategory::BUILDINGS | EntityCategory::MOB;
 
@@ -58,7 +64,6 @@ void Player::box_init(){
 }
 
 void Player::update(){
-    // center += speed_dir * speed;
     box->SetLinearVelocity(b2Vec2(speed_dir.x * speed, speed_dir.y * speed));
 }
 
@@ -66,10 +71,8 @@ void Player::update(){
 void Player::display(){
     ofSetColor(0, 0, 255);
 
-    b2Vec2 position = box->GetPosition();
-    b2Vec2 screen_coord = world_ptr->camera->transformeBoxToScreenCoorditane(position);
-    // ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
-    b2Vec2 heading(ofGetAppPtr()->mouseX - screen_coord.x, ofGetAppPtr()->mouseY - screen_coord.y);
+    ofVec2f screen_coord = get_center_screen();
+    ofVec2f heading(ofGetAppPtr()->mouseX - screen_coord.x, ofGetAppPtr()->mouseY - screen_coord.y);
 
     if (state == PlayerState::MOVING){
         sprite.display(screen_coord, heading);
@@ -94,8 +97,6 @@ void Player::change_speed_dir(const unsigned int key_pressed){
     if (key_pressed & E_KEY_PRESS) speed_dir += E_dir;  
     if (key_pressed & N_KEY_PRESS) speed_dir += N_dir;
     if (key_pressed & S_KEY_PRESS) speed_dir += S_dir;
-
-    // speed_dir = new_speed_dir;
 }
 
 
@@ -114,11 +115,6 @@ void Player::collision_event(worldEntity *collision_entity){
 }
 
 
-// TODO delete method
-ofVec2f Player::get_center(){
-    get_center_screen();
-    return get_center_box();
-}
 
 void Player::hud_display(){
 

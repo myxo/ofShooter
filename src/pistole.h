@@ -16,9 +16,6 @@ public:
     void collision_event(worldEntity *collision_entity);
 
 public:
-    // World *world_ptr;
-    // b2Body *box;
-
     ofVec2f speed_dir;
     int damage;
 };

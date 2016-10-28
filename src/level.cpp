@@ -9,15 +9,15 @@
 using namespace std;
 
 int LevelObject::get_property_int(string name){
-    return stoi(properties[name]);
+    return stoi(properties.at(name));
 }
 
 double  LevelObject::get_property_double(string name){
-    return stod(properties[name]);
+    return stod(properties.at(name));
 }
 
 string  LevelObject::get_property_string(string name){
-    return properties[name];
+    return properties.at(name);
 }
 
 
@@ -25,39 +25,42 @@ string  LevelObject::get_property_string(string name){
 
 Level::Level() {}
 
-// TODO throw exeption if there are no such object???
 LevelObject Level::get_object(string name){
     for (auto object : object_array){
         if (object.name == name){
             return object;
         }
     }
-    return LevelObject();
+    throw string("No object with name ") + name;
 }
 
 
 vector<LevelObject> Level::get_objects(string name){
-    // TODO check if there are some function for this
     vector<LevelObject> array;
     for (auto object : object_array){
         if (object.name == name){
             array.push_back(object);
         }
     }
+
+    if (array.empty()){
+        throw string("No objects with name ") + name;
+    }
     return array;
 }
 
 
-// TODO mae propper transition from texture to screen coord
+// TODO make propper transition from texture to screen coord
 void Level::display(int x, int y){
     ofSetColor(255, 255, 255);
     static_background.draw(x, y);
 }
 
 
-// TODO check if I could allocate frame buffer logically inly once
 void Level::make_static_background_texture(){
-    static_background.allocate(width*tile_width, height*tile_height, GL_RGBA);
+    if ( !static_background.isAllocated()){
+        static_background.allocate(width*tile_width, height*tile_height, GL_RGBA);
+    }
     static_background.begin();
 
     ofSetColor(255, 255, 255);
@@ -65,7 +68,7 @@ void Level::make_static_background_texture(){
         int k = 0;
         for (int j = 0; j < height; j++){
             for (int i = 0; i < width; i++){
-                layer.tiles[k++]->draw(i*tile_width, j*tile_height);
+                layer.tiles.at(k++)->draw(i*tile_width, j*tile_height);
             }
         }
     }
@@ -73,8 +76,7 @@ void Level::make_static_background_texture(){
     static_background.end();
 }
 
-// TODO make propper error handler + make universal (check tmx spec)
-// + check for vector copy
+// TODO  make universal (check tmx spec)
 void Level::load_from_file(const char* filename){
     using namespace tinyxml2;
 
@@ -115,6 +117,7 @@ void Level::load_from_file(const char* filename){
     string image_filename = image_ptr->Attribute("source");
     string image_root = string("../../data/");
     // TODO add multiple tileset (should be easy)
+
     // may throw exception
     tileset.read_from_file((image_root + image_filename).c_str(), tileWidth, tileHeight, tileCount, columns, spacing, margin);
 

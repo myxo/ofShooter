@@ -2,18 +2,37 @@
 #include "world.h"
 #include "boxContactListener.h"
 #include "sprite.h"
+#include "utils.h"
 
 #include "ofMain.h"
 #include "Box2D/Box2D.h"
 
 #include <iostream>
 
-
 Mob::Mob(ofVec2f center, World *world_ptr){
+    mob_init(center, world_ptr);
+}
+
+Mob::Mob(LevelObject &lObject, World *world_ptr){
+    ofVec2f center = world_ptr->camera->transformeScreenToBoxCoorditane(ofVec2f(lObject.x0, lObject.y0));
+    mob_init(center, world_ptr);
+}
+
+Mob::~Mob(){}
+
+
+void Mob::mob_init(ofVec2f center, World *world_ptr){
     try{
         this->center    = center;
         this->radius    = world_ptr->game_parameters.getDouble("mob_radius");
-        this->life      = world_ptr->game_parameters.getDouble("mob_life");
+        // this->speed     = world_ptr->game_parameters.getDouble("mob_speed");
+        this->max_speed = world_ptr->game_parameters.getDouble("mob_speed");
+        this->life      = world_ptr->game_parameters.getInt("mob_life");
+        this->damage    = world_ptr->game_parameters.getInt("mob_damage");
+        this->resting_time = world_ptr->game_parameters.getInt("mob_rest_time_ms");
+        this->attack_radius = world_ptr->game_parameters.getDouble("mob_attack_radius");
+
+        MAX_LIFE = life;
 
         this->world_ptr = world_ptr;
 
@@ -34,8 +53,6 @@ Mob::Mob(ofVec2f center, World *world_ptr){
     box_init(center);
 }
 
-Mob::~Mob(){}
-
 
 // box2d fixture initialize routine
 void Mob::box_init(ofVec2f center){
@@ -50,10 +67,8 @@ void Mob::box_init(ofVec2f center){
     dynamicBox.m_radius = radius;
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
-    // fixtureDef.density = 15.0f;
-    // fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = EntityCategory::MOB;
-    // collide enttities
+    // collide with
     fixtureDef.filter.maskBits = EntityCategory::BUILDINGS | EntityCategory::MOB 
             | EntityCategory::BULLET | EntityCategory::PLAYER ;
     box->CreateFixture(&fixtureDef);
@@ -62,11 +77,21 @@ void Mob::box_init(ofVec2f center){
 }
 
 void Mob::update_state(){
-    ofVec2f p1 = world_ptr->player->get_center();
-    b2Vec2 p2 = box->GetPosition();
+    if (state == MobState::DEAD)
+        return;
+    
+    ofVec2f p1 = world_ptr->player->get_center_box();
+    ofVec2f p2 = get_center_box();
     speed_dir.set(p1.x - p2.x, p1.y - p2.y);
-    // speed_dir.normalize();
+    speed_dir.limit(max_speed);
 
+    if (get_time_shift_ms(attack_time) > resting_time){
+        state = MobState::MAY_ATTACK;
+    }
+
+    if (p2.distance(p1) - world_ptr->player->radius < attack_radius){
+        make_damage();
+    }
 }
 
 void Mob::update(){
@@ -74,15 +99,14 @@ void Mob::update(){
         box->SetLinearVelocity(b2Vec2(0, 0));
     else
         box->SetLinearVelocity(b2Vec2(speed_dir.x, speed_dir.y));
-    // box->ApplyForce(b2Vec2(speed_dir.x, speed_dir.y), b2Vec2(0, 0), true);
+
 }
 
 void Mob::display(){
-    b2Vec2 position = box->GetPosition();
-    b2Vec2 screen_coord = world_ptr->camera->transformeBoxToScreenCoorditane(position);
+    ofVec2f screen_coord = get_center_screen();
 
     if (state == MobState::DEAD){
-        dead_sprite.display(screen_coord,b2Vec2(0,1));
+        dead_sprite.display(screen_coord, ofVec2f(0,1));
         return;
     }
 
@@ -91,8 +115,7 @@ void Mob::display(){
     else if (state == MobState::ATTACKING)
         ofSetColor(255, 255, 0);
 
-    // ofDrawCircle(screen_coord.x, screen_coord.y, radius * World::WORLD_RESOLUTION);
-    sprite.display(screen_coord, World::of2box(speed_dir));
+    sprite.display(screen_coord, speed_dir);
 }
 
 void Mob::take_damage(int damage){
@@ -124,14 +147,19 @@ void Mob::make_damage(){
     if (state == MobState::DEAD)
         return;
 
-    world_ptr->player->take_damage(damage);
+    if (state != MobState::MAY_ATTACK){
+        return;
+    }
 
-    state = MobState::ATTACKING;
+    attack_time = chrono::steady_clock::now();
+    world_ptr->player->take_damage(damage);
+    // state = MobState::ATTACKING; // TODO make attacking animation
+    state = MobState::REST;
 }
 
 void Mob::collision_event(worldEntity *collision_entity){
-    Player *pl = dynamic_cast<Player*>(collision_entity);
-    if (pl != nullptr){
-        make_damage();
-    }   
+    // Player *pl = dynamic_cast<Player*>(collision_entity);
+    // if (pl != nullptr){
+    //     make_damage();
+    // }   
 }

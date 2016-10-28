@@ -2,12 +2,10 @@
 
 #include "worldEntity.h"
 
-#include "iostream"
-
-// #define B2D_PLAYER_IDENTIFYER 0x01
-// #define B2D_MOB_IDENTIFYER 0x02
+// #include "iostream"
 
 
+// class for Box2d collision handling
 class ContactListener : public b2ContactListener {
     void BeginContact(b2Contact* contact) {
         

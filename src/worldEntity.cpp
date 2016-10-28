@@ -10,11 +10,7 @@ worldEntity::worldEntity(){
         obj_id = obj_count++;
 }
 
-worldEntity::~worldEntity(){
-    // if (box != nullptr){
-    //     box->GetWorld()->DestroyBody( box );
-    // }
-}
+worldEntity::~worldEntity(){}
 
 ofVec2f worldEntity::get_center_box() const{
     b2Vec2 p = box->GetPosition();

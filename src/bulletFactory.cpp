@@ -5,7 +5,10 @@
 
 using namespace std;
 
-BulletFactory::BulletFactory(World *world_ptr_) : world_ptr(world_ptr_), gun_fire_time_array(MAX_WEAPON_NUMBER){
+BulletFactory::BulletFactory(World *world_ptr_) : 
+    world_ptr(world_ptr_), 
+    gun_fire_time_array(MAX_WEAPON_NUMBER)
+{
     active_gun = GunState::PISTOLE;
     active_gun_index = 0;
 
@@ -28,6 +31,7 @@ void BulletFactory::change_gun(int num){
     }
 }
 
+
 bool BulletFactory::fire(ofVec2f mouse_screen){
     long time_milils = (std::chrono::duration_cast<chrono::milliseconds>
         (chrono::steady_clock::now() - gun_fire_time_array[active_gun_index])).count();
@@ -42,11 +46,13 @@ bool BulletFactory::fire(ofVec2f mouse_screen){
 
 }
 
+
 double BulletFactory::get_gun_refactoring_ratio(){
     long time_milils = (std::chrono::duration_cast<chrono::milliseconds>
         (chrono::steady_clock::now() - gun_fire_time_array[active_gun_index])).count();
     return min((double)time_milils / (double)gun_refactoring_time[active_gun_index], 1.0);
 }
+
 
 void BulletFactory::create_bullets(ofVec2f mouse_screen){
     switch(active_gun){
@@ -56,6 +62,7 @@ void BulletFactory::create_bullets(ofVec2f mouse_screen){
 }
 
 
+// temporary functions
 void BulletFactory::create_pistole_bullets(ofVec2f mouse_screen){
     ofVec2f mouse_box = world_ptr->box2of(world_ptr->camera->transformeScreenToBoxCoorditane(b2Vec2(mouse_screen.x, mouse_screen.y)));
     ofVec2f player_center = world_ptr->player->get_center_box();

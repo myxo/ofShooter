@@ -31,23 +31,20 @@ World::World(){
         level->make_static_background_texture();
         
         LevelObject p_object = level->get_object("player");
-        player = std::make_shared<Player>(camera->transformeScreenToBoxCoorditane(ofVec2f(p_object.x0, p_object.y0)), this);
+        player = std::make_shared<Player>(p_object, this);
 
         vector<LevelObject> b_object_vector = level->get_objects(string("building"));
         for (auto build_object: b_object_vector){
             building_array.push_back(std::make_shared<Building>(this));
             building_array.back()->build_from_level_object(build_object);
-            // cout << building_array.back()->vertex[0] << "\t" << building_array.back()->vertex[1] << endl;
         }
-        // building_array[0]->building_from_file("../data/building");
 
         vector<LevelObject> m_object_vector = level->get_objects(string("enemy"));
         for (size_t i = 0; i < m_object_vector.size() && i < MOB_MAX; i++){
             LevelObject &l_object = m_object_vector[i];
-            mob_array.push_back(std::make_shared<Mob>(camera->transformeScreenToBoxCoorditane(ofVec2f(l_object.x0, l_object.y0)), this));
+            mob_array.push_back(std::make_shared<Mob>(l_object, this));
         }
 
-        tile.load("../../data/bg.png");
     } catch (string e){
         cout << "ERROR in world constrctor: " << e << endl;
         exit(1);

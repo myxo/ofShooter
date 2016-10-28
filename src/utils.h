@@ -1,7 +1,7 @@
 #pragma once
 
-#include <unordered_map>
+#include <chrono>
 
 using namespace std;
 
-unordered_map<string, string> parse_config_file(const char* filename);
+long long get_time_shift_ms(chrono::time_point<chrono::steady_clock> start_time);

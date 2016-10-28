@@ -1,8 +1,11 @@
 #pragma once
 
+#include <chrono>
+
 #include "movingEntity.h"
 #include "world.h"
 #include "sprite.h"
+#include "level.h"
 
 #include "ofMain.h"
 // #include "ofxBox2d.h"
@@ -21,19 +24,8 @@ enum class MobState {
 
 class Mob : public movingEntity{
 public:
-    const int ATTACK_TIME = 500, REST_TIME = 1000;
-
-
-    int     damage = 5;
-    float   speed_max = 1;
-    int     attack_time_start, rest_time_start;
-    // World   *world_ptr;
-    
-
-    MobState state;
-
-public:
     Mob(ofVec2f center, World *world_ptr);
+    Mob(LevelObject &lObject, World *world_ptr);
     ~Mob();
 
     void update_state();
@@ -45,9 +37,17 @@ public:
     void collision_event(worldEntity *collision_entity);
     bool is_dead();
 
+    int damage;
+    double speed, max_speed;
+    MobState state;
+
 private:
+    void mob_init(ofVec2f center, World *world_ptr);
     void box_init(ofVec2f center);
 
+    std::chrono::time_point<std::chrono::steady_clock> attack_time;
+    int resting_time;
+    double attack_radius;
     Sprite sprite, dead_sprite;
 };
 

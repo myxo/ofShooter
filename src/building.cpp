@@ -10,34 +10,32 @@ Building::Building(World *world_ptr_) : worldEntity(){
 
 Building::~Building(){}
 
+
 void Building::box_init(){
     b2BodyDef bodyDef;
     bodyDef.type = b2_kinematicBody;
-    bodyDef.position.Set(0, 0);
+    bodyDef.position.Set(0, 0); // maybe left up corner?
     box = world_ptr->box2d_world->CreateBody(&bodyDef);
 
     b2PolygonShape shape;
-
     b2Vec2 vertices[8];
     for (size_t i = 0; i < vertex.size(); i++){
         vertices[i].Set(vertex[i].x, vertex[i].y); 
     }
-    // cout << vertices;
-
     shape.Set(vertices, vertex.size());
+    
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shape;
-    // fixtureDef.density = 15.0f;
-    // fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = EntityCategory::BUILDINGS;
+    // collide with
     fixtureDef.filter.maskBits = EntityCategory::PLAYER | EntityCategory::MOB | EntityCategory::BULLET;
 
-    // box->CreateFixture(&shape);
     box->CreateFixture(&fixtureDef);
-
     box->SetUserData(this);
 }
 
+
+// deprecated
 void Building::building_from_file(const char* filename){
     ifstream f(filename);
 
@@ -64,6 +62,7 @@ void Building::build_from_level_object(const LevelObject &object){
                 , ofVec2f(object.x0, object.y0 + object.height)
                 , ofVec2f(object.x0 + object.width, object.y0 + object.height)
                 , ofVec2f(object.x0 + + object.width, object.y0)};
+    // counterclockwise order
     vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[3]));
     vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[2]));
     vertex.push_back(world_ptr->camera->transformeScreenToBoxCoorditane(v[1]));
@@ -87,5 +86,4 @@ void Building::display(){
     // }
 }
 
-void Building::collision_event(worldEntity *collision_entity){
-}
+void Building::collision_event(worldEntity *collision_entity){}

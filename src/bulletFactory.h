@@ -23,7 +23,7 @@ public:
     double get_gun_refactoring_ratio();
     
     GunState active_gun;
-
+    
 private:
     const int MAX_WEAPON_NUMBER = 10;
 

@@ -33,27 +33,27 @@ void Sprite::set_single_image_sprite(const char* filename){
     animationSpeed  = 1.0;
 }
     
-void Sprite::display(b2Vec2 position, b2Vec2 heading, double scaleX, double scaleY){
+void Sprite::display(ofVec2f position, ofVec2f heading, double scaleX, double scaleY){
     display_still(position, heading, scaleX, scaleY);
 
     frame_number++;
-    if (frame_number >= frame_total / animationSpeed)
+    if (frame_number >= (int)(frame_total / animationSpeed)){
         frame_number = 0;
+    }
 
 }
 
-void Sprite::display_still(b2Vec2 position, b2Vec2 heading, double scaleX, double scaleY){
+void Sprite::display_still(ofVec2f position, ofVec2f heading, double scaleX, double scaleY){
     ofPushMatrix();
     ofTranslate(position.x, position.y);
 
-    ofVec2f v1(1,0);
-    ofVec2f v2(heading.x,heading.y); // TODO go to ofVec2f in all situation
-    double angle = v1.angle(v2) - 90;
+    ofVec2f e(1,0);
+    double angle = e.angle(heading) - 90;
     
     ofRotate(angle);
 
     int index = (int) (frame_number * animationSpeed + seed) % frame_total;
-    int sizeX = frames[index]->getWidth(), sizeY = frames[index]->getHeight();
+    int sizeX = frames.at(index)->getWidth(), sizeY = frames[index]->getHeight();
     ofSetColor(255, 255, 255);
     frames[index]->draw(-sizeX/2, -sizeY/2, sizeX*scaleX, sizeY*scaleY);
 

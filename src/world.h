@@ -9,7 +9,6 @@
 #include "level.h"
 #include "gameParameter.h"
 #include "camera.h"
-// #include "wall.h"
 #include "Box2D/Box2D.h"
 
 #include <cstdint>
@@ -63,7 +62,6 @@ public:
 
     std::shared_ptr<b2World>                box2d_world;
     ofImage                                 background_image;
-    ofImage                                 tile;
 
     ContactListener* CL;
     float32 prev_frame_time;
