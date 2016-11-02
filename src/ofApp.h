@@ -36,4 +36,6 @@ class ofApp : public ofBaseApp{
 		std::shared_ptr<HUDScreen> 	hud_screen;
 		std::shared_ptr<HUDDebug>	hud_debug;
 
+		ofFbo mask_fbo;
+
 };

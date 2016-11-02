@@ -23,8 +23,8 @@ public:
 // private:
 public:
     int window_start_x = 0, window_start_y = 0; // for screen transition
-    const int WINDOW_BOUND_TO_EXTEND_X = 100; // todo. rename + if screen is big, get 1/5 of window_width
-    const int WINDOW_BOUND_TO_EXTEND_Y = 100; // todo. -//-
+    const int WINDOW_BOUND_TO_EXTEND_X = 200; // todo. rename + if screen is big, get 1/5 of window_width
+    const int WINDOW_BOUND_TO_EXTEND_Y = 200; // todo. -//-
     int WORLD_RESOLUTION = 16; // pixels in meter
 
 
