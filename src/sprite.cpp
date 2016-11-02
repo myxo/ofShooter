@@ -12,7 +12,9 @@ void Sprite::parse_sprite_file(int col, int row, int sizeX, int sizeY, int offse
     this->frame_number = 0;
 
     ofImage source;
-    source.load(filename);
+    if (!source.load(filename)){
+        throw string("cannot open ") + string(filename);
+    }
 
     int k = 0;
     for (int i = 0; i < row; i++){
@@ -85,7 +87,9 @@ shared_ptr<ofImage> TileSet::get_image_pointer(int tile_id){
 // offset - x and y offset from begining
 void TileSet::read_from_file(const char* filename, int tilewidth, int tileheight, int tilecount, int columns, int gap, int offset){
     ofImage source;
-    source.load(filename);
+    if (!source.load(filename)){
+        throw string("cannot open ") + string(filename);
+    }
     tileWidth = tilewidth;
     tileHeight = tileheight;
 
